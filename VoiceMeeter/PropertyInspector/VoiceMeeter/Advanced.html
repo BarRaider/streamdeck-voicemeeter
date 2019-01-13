@@ -1,0 +1,44 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>BarRaider's VM Modify Setting</title>
+    <link rel="stylesheet" href="../sdpi.css">
+</head>
+<body>
+    <div class="sdpi-wrapper">
+        <details class="message question">
+            <summary>This plugins allows you to send a list of commands directly to VoiceMeeter (click this text for more info...)</summary>
+            <p>
+                Example: "Strip[0].mono=1;Strip[1].Mute=1;Bus[2].Gain=-20;"
+            </p>
+            <p>
+                More details in this Plugin's wiki.
+            </p>
+        </details>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Key Press</div>
+            <input class="sdpi-item-value" placeholder="Configuration to set on keypress" value="" id="setValue" oninput="updateSettings()">
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Long-Press</div>
+            <input class="sdpi-item-value" placeholder="Configuration to set on long keypress" value="" id="longPressValue" oninput="updateSettings()">
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Title</div>
+            <select class="sdpi-item-value select" id="titleType" oninput="updateSettings()" value="0">
+                <option value="0">VoiceMeeter Value</option>
+                <option value="1">-User Defined-</option>
+            </select>
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Title Value</div>
+            <input class="sdpi-item-value" placeholder="Parameter to fetch and show on title" value="" id="titleParam" oninput="updateSettings()">
+        </div>
+    </div>
+    <script src="../Advanced.js"></script>
+</body>
+</html>

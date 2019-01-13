@@ -1,0 +1,72 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>BarRaider's VM Modify Setting</title>
+    <link rel="stylesheet" href="../sdpi.css">
+</head>
+<body>
+    <div class="sdpi-wrapper">
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Param</div>
+            <select class="sdpi-item-value select" id="paramType" oninput="updateSettings()" value="0">
+                <option value="15">audibility</option>
+                <option value="7">color_x</option>
+                <option value="8">color_y</option>
+                <option value="1">comp</option>
+                <option value="11">eqgain1</option>
+                <option value="12">eqgain2</option>
+                <option value="13">eqgain3</option>
+                <option value="9">fx_x</option>
+                <option value="10">fx_y</option>
+                <option value="2">gate</option>
+                <option value="0">gain</option>
+                <option value="14">mc</option>
+                <option value="4">mono</option>
+                <option value="5">pan_x</option>
+                <option value="6">pan_y</option>
+                <option value="3">solo</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Strip/Bus</div>
+            <select class="sdpi-item-value select" id="strip" oninput="updateSettings()">
+                <option value="Strip">Strip</option>
+                <option value="Bus">Bus</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Strip/Bus Num</div>
+            <select class="sdpi-item-value select" id="stripNum" oninput="updateSettings()">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Value</div>
+            <input class="sdpi-item-value" placeholder="Value to set on keypress" value="" id="setValue" oninput="updateSettings()">
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Long-Press Value</div>
+            <input class="sdpi-item-value" placeholder="Value to set on long keypress" value="" id="longPressValue" oninput="updateSettings()">
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Title</div>
+            <select class="sdpi-item-value select" id="titleType" oninput="updateSettings()" value="0">
+                <option value="0">VoiceMeeter Value</option>
+                <option value="1">-User Defined-</option>
+            </select>
+        </div>
+    </div>
+    <script src="../Modify.js"></script>
+</body>
+</html>
