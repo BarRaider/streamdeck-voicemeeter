@@ -1,0 +1,64 @@
+{
+  "Actions": [
+    {
+      "Icon": "Images/icon",
+      "Name": "VoiceMeeter Mute/Unmute",
+      "States": [
+        {
+          "Image": "Images/vm",
+          "TitleAlignment": "bottom",
+          "FontSize": "16"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "VoiceMeeter Mute/Unmute",
+      "UUID": "com.barraider.vmmicrophone",
+      "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/Microphone.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "VoiceMeeter Modify Setting",
+      "States": [
+        {
+          "Image": "Images/vmTop",
+          "TitleAlignment": "bottom",
+          "FontSize": "16"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "VoiceMeeter Modify Setting",
+      "UUID": "com.barraider.vmmodify",
+      "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/Modify.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "VoiceMeeter Advanced Plugin",
+      "States": [
+        {
+          "Image": "Images/vmTop",
+          "TitleAlignment": "bottom",
+          "FontSize": "16"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "Tooltip": "VoiceMeeter Advanced Plugin - Directly access any setting through text",
+      "UUID": "com.barraider.vmadvanced",
+      "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/Advanced.html"
+    }
+  ],
+  "Author": "BarRaider",
+  "Description": "VoiceMeeter integration for Stream Deck",
+  "Name": "VoiceMeeter Integration",
+  "Icon": "Images/pluginIcon",
+  "URL": "https://github.com/BarRaider/streamdeck-voicemeeter",
+  "Version": "0.5",
+  "CodePath": "com.barraider.voicemeeter.sdPlugin.exe",
+  "Category": "BarRaider",
+  "CategoryIcon": "Images/categoryIcon",
+  "OS": [
+    {
+      "Platform": "windows",
+      "MinimumVersion": "10"
+    }
+  ]
+}

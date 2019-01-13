@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>BarRaider's VM Mute/Unmute</title>
+    <link rel="stylesheet" href="../sdpi.css">
+</head>
+<body>
+    <div class="sdpi-wrapper">
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Mic Type</div>
+            <select class="sdpi-item-value select" id="micType" oninput="updateSettings()">
+                <option value="0">Single Setting</option>
+                <option value="1">Toggle Mode</option>
+                <option value="2">Push To Talk</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Strip/Bus</div>
+            <select class="sdpi-item-value select" id="strip" oninput="updateSettings()">
+                <option value="Strip">Strip</option>
+                <option value="Bus">Bus</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Strip/Bus Num</div>
+            <select class="sdpi-item-value select" id="stripNum" oninput="updateSettings()">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Icon</div>
+            <select class="sdpi-item-value select" id="imageType" oninput="updateSettings()">
+                <option value="0">Microphone</option>
+                <option value="3">Microphone2</option>
+                <option value="1">Speaker</option>
+                <option value="2">On / Off</option>
+            </select>
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Value</div>
+            <input class="sdpi-item-value" placeholder="Used for Single Setting Mode" value="" id="singleValue" oninput="updateSettings()">
+        </div>
+    </div>
+    <script src="../Microphone.js"></script>
+</body>
+</html>
