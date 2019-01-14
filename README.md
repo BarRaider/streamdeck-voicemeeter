@@ -30,13 +30,13 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 - Option to turn off the Live feedback and set the title to whatever you want
 
 ### FAQ
-Q: Can I use this plugin to Restart VoiceMeeter?
+Q: Can I use this plugin to Restart VoiceMeeter?  
 A: Yes! Choose the "VoiceMeeter Advanced Plugin" and use the following command: `Command.Restart = 1;`
 
-Q: Stream Deck shows a big VoiceMeeter logo and nothing works
+Q: Stream Deck shows a big VoiceMeeter logo and nothing works  
 A: This means that VoiceMeeter is either not running or not properly installed. Try reloading VoiceMeeter, if that doesn't work - try reinstalling.
 
-Q: What are the valid values for each setting?
+Q: What are the valid values for each setting?  
 A: Valid values can be found starting on page 9 of VoiceMeeter API PDF: https://download.vb-audio.com/Download_CABLE/VoicemeeterRemoteAPI.pdf
 
 ## Dependencies
