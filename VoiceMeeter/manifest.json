@@ -51,7 +51,7 @@
   "Name": "VoiceMeeter Integration",
   "Icon": "Images/pluginIcon",
   "URL": "https://github.com/BarRaider/streamdeck-voicemeeter",
-  "Version": "0.5",
+  "Version": "0.6",
   "CodePath": "com.barraider.voicemeeter.sdPlugin.exe",
   "Category": "BarRaider",
   "CategoryIcon": "Images/categoryIcon",

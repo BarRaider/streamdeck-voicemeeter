@@ -46,6 +46,18 @@ function connectSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
 
             var singleValue = document.getElementById('singleValue');
             singleValue.value = payload['singleValue'];
+
+            var userImage1_filename = document.getElementById('userImage1_filename');
+            userImage1_filename.innerText = payload['userImage1'];
+            if (!userImage1_filename.innerText) {
+                userImage1_filename.innerText = "No file...";
+            }
+
+            var userImage2_filename = document.getElementById('userImage2_filename');
+            userImage2_filename.innerText = payload['userImage2'];
+            if (!userImage2_filename.innerText) {
+                userImage2_filename.innerText = "No file...";
+            }
         }
     };
 }
@@ -56,6 +68,10 @@ function updateSettings() {
     var stripNum = document.getElementById('stripNum');
     var imageType = document.getElementById('imageType');
     var singleValue = document.getElementById('singleValue');
+    var userImage1 = document.getElementById('userImage1');
+    var userImage2 = document.getElementById('userImage2');
+    var userImage1_filename = document.getElementById('userImage1_filename');
+    var userImage2_filename = document.getElementById('userImage2_filename');
 
     var payload = {};
 
@@ -63,8 +79,28 @@ function updateSettings() {
     payload.micType     = micType.value;
     payload.strip       = strip.value;
     payload.stripNum    = stripNum.value;
-    payload.imageType = imageType.value;
+    payload.imageType   = imageType.value;
     payload.singleValue = singleValue.value;
+    payload.userImage1  = userImage1.value;
+    if (!userImage1.value) {
+        // Fetch innerText if file is empty (happens when we lose and regain focus to this key)
+        payload.userImage1 = userImage1_filename.innerText;
+    }
+    else {
+        // Set value on initial file selction
+        userImage1_filename.innerText = userImage1.value;
+    }
+
+    payload.userImage2 = userImage2.value;
+    if (!userImage2.value) {
+        // Fetch innerText if file is empty (happens when we lose and regain focus to this key)
+        payload.userImage2 = userImage2_filename.innerText;
+    }
+    else {
+        // Set value on initial file selction
+        userImage2_filename.innerText = userImage2.value;
+    }
+
     sendPayloadToPlugin(payload);
 }
 

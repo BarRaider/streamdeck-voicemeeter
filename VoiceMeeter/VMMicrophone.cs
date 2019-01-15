@@ -1,10 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace VoiceMeeter
 {
@@ -22,7 +18,8 @@ namespace VoiceMeeter
             Microphone = 0,
             Speaker = 1,
             OnOff = 2,
-            Microphone2 = 3
+            Microphone2 = 3,
+            UserDefined = 4
         }
 
         private class InspectorSettings : SettingsBase
@@ -53,6 +50,12 @@ namespace VoiceMeeter
 
             [JsonProperty(PropertyName = "imageType")]
             public ImageTypeEnum ImageType { get; set; }
+
+            [JsonProperty(PropertyName = "userImage1")]
+            public string UserImage1 { get; set; }
+
+            [JsonProperty(PropertyName = "userImage2")]
+            public string UserImage2 { get; set; }
         }
 
         #region Private members
@@ -133,6 +136,8 @@ namespace VoiceMeeter
                         settings.StripNum    = (int)payload["stripNum"];
                         settings.SingleValue = (string)payload["singleValue"];
                         settings.ImageType   = (ImageTypeEnum)Enum.Parse(typeof(ImageTypeEnum), (string)payload["imageType"]);
+                        settings.UserImage1 = Uri.UnescapeDataString(((string)payload["userImage1"]).Replace("C:\\fakepath\\", ""));
+                        settings.UserImage2 = Uri.UnescapeDataString(((string)payload["userImage2"]).Replace("C:\\fakepath\\", ""));
                         settings.SetSettingsAsync();
                         break;
                 }
@@ -158,6 +163,8 @@ namespace VoiceMeeter
                         return Properties.Plugin.Default.OnOffDisabled;
                     case ImageTypeEnum.Microphone2:
                         return Properties.Plugin.Default.Mic2Mute;
+                    case ImageTypeEnum.UserDefined:
+                        return Tools.FileToBase64(settings.UserImage1.ToString(), true);
                 }
 
             }
@@ -173,6 +180,8 @@ namespace VoiceMeeter
                         return Properties.Plugin.Default.OnOffEnabled;
                     case ImageTypeEnum.Microphone2:
                         return Properties.Plugin.Default.Mic2Enabled;
+                    case ImageTypeEnum.UserDefined:
+                        return Tools.FileToBase64(settings.UserImage2.ToString(), true);
                 }
             }
 

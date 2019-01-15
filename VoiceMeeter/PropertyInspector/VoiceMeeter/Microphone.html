@@ -45,11 +45,28 @@
                 <option value="3">Microphone2</option>
                 <option value="1">Speaker</option>
                 <option value="2">On / Off</option>
+                <option value="4">- User Defined -</option>
             </select>
         </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Value</div>
             <input class="sdpi-item-value" placeholder="Used for Single Setting Mode" value="" id="singleValue" oninput="updateSettings()">
+        </div>
+        <div class="sdpi-item" id="userIcon1_selector">
+            <div class="sdpi-item-label">User defined image1</div>
+            <div class="sdpi-item-group file" id="filepickergroup">
+                <input class="sdpi-item-value" type="file" id="userImage1" accept=".jpg, .jpeg, .png" oninput="updateSettings()">
+                <label class="sdpi-file-info " for="userImage1" id="userImage1_filename">No file...</label>
+                <label class="sdpi-file-label" for="userImage1" oninput="updateSettings()">Choose file...</label>
+            </div>
+        </div>
+        <div class="sdpi-item" id="userIcon2_selector">
+            <div class="sdpi-item-label">User defined image2</div>
+            <div class="sdpi-item-group file" id="filepickergroup2">
+                <input class="sdpi-item-value" type="file" id="userImage2" accept=".jpg, .jpeg, .png" oninput="updateSettings()">
+                <label class="sdpi-file-info " for="userImage2"  id="userImage2_filename">No file...</label>
+                <label class="sdpi-file-label" for="userImage2" oninput="updateSettings()">Choose file...</label>
+            </div>
         </div>
     </div>
     <script src="../Microphone.js"></script>
