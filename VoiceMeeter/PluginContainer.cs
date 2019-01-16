@@ -126,6 +126,9 @@ namespace VoiceMeeter
                     case "com.barraider.vmadvanced":
                         instances[e.Event.Context] = new VMAdvanced(connection, e.Event.Action, e.Event.Context, e.Event.Payload.Settings);
                         break;
+                    case "com.barraider.vmadvancedtoggle":
+                        instances[e.Event.Context] = new VMAdvancedToggle(connection, e.Event.Action, e.Event.Context, e.Event.Payload.Settings);
+                        break;
                 }
             }
             finally

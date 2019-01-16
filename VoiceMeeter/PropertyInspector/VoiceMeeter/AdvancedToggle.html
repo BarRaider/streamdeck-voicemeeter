@@ -1,0 +1,65 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>BarRaider's VM Modify Setting</title>
+    <link rel="stylesheet" href="../sdpi.css">
+</head>
+<body>
+    <div class="sdpi-wrapper">
+        <details class="message question">
+            <summary>Toggle between Mode1 and Mode2 by pressing the button (click this text for more info...)</summary>
+            <p>
+                Example: "Strip[0].mono=1;Bus[2].Gain=-20;"
+            </p>
+            <p>
+                For more information or feedback/suggestions contact me at <a href="https://BarRaider.github.io" target="_blank">https://BarRaider.github.io</a>
+            </p>
+        </details>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Mode1 Key Press</div>
+            <input class="sdpi-item-value" placeholder="Configuration to set when toggled to Mode1" value="" id="mode1Value" oninput="updateSettings()">
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Mode1 Check</div>
+            <input class="sdpi-item-value" placeholder="Setting to check if we're in Mode1 or not" value="" id="mode1Param" oninput="updateSettings()">
+        </div>
+        <div class="sdpi-item" id="userIcon1_selector">
+            <div class="sdpi-item-label">Mode1 image1</div>
+            <div class="sdpi-item-group file" id="filepickergroup">
+                <input class="sdpi-item-value" type="file" id="userImage1" accept=".jpg, .jpeg, .png" oninput="updateSettings()">
+                <label class="sdpi-file-info " for="userImage1" id="userImage1_filename">No file...</label>
+                <label class="sdpi-file-label" for="userImage1" oninput="updateSettings()">Choose file...</label>
+            </div>
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Mode2 Key Press</div>
+            <input class="sdpi-item-value" placeholder="Configuration to set when toggled to Mode2" value="" id="mode2Value" oninput="updateSettings()">
+        </div>
+
+        <div class="sdpi-item" id="userIcon2_selector">
+            <div class="sdpi-item-label">Mode2 image</div>
+            <div class="sdpi-item-group file" id="filepickergroup2">
+                <input class="sdpi-item-value" type="file" id="userImage2" accept=".jpg, .jpeg, .png" oninput="updateSettings()">
+                <label class="sdpi-file-info " for="userImage2" id="userImage2_filename">No file...</label>
+                <label class="sdpi-file-label" for="userImage2" oninput="updateSettings()">Choose file...</label>
+            </div>
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Title</div>
+            <select class="sdpi-item-value select" id="titleType" oninput="updateSettings()" value="0">
+                <option value="0">VoiceMeeter Value</option>
+                <option value="1">-User Defined-</option>
+            </select>
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Title Value</div>
+            <input class="sdpi-item-value" placeholder="Parameter to fetch and show on title" value="" id="titleParam" oninput="updateSettings()">
+        </div>
+    </div>
+    <script src="../AdvancedToggle.js"></script>
+</body>
+</html>

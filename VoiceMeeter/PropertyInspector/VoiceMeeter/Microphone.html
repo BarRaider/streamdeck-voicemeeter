@@ -10,6 +10,9 @@
 </head>
 <body>
     <div class="sdpi-wrapper">
+        <details class="message info">
+            <summary>For feedback/suggestions contact me at <a href="https://BarRaider.github.io" target="_blank">https://BarRaider.github.io</a> </summary>
+        </details>
         <div class="sdpi-item" id="select_single">
             <div class="sdpi-item-label">Mic Type</div>
             <select class="sdpi-item-value select" id="micType" oninput="updateSettings()">
@@ -64,7 +67,7 @@
             <div class="sdpi-item-label">User defined image2</div>
             <div class="sdpi-item-group file" id="filepickergroup2">
                 <input class="sdpi-item-value" type="file" id="userImage2" accept=".jpg, .jpeg, .png" oninput="updateSettings()">
-                <label class="sdpi-file-info " for="userImage2"  id="userImage2_filename">No file...</label>
+                <label class="sdpi-file-info " for="userImage2" id="userImage2_filename">No file...</label>
                 <label class="sdpi-file-label" for="userImage2" oninput="updateSettings()">Choose file...</label>
             </div>
         </div>

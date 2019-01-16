@@ -32,6 +32,8 @@ namespace VoiceMeeter
                 instance.StripNum = 0;
                 instance.SingleValue = String.Empty;
                 instance.ImageType = ImageTypeEnum.Microphone;
+                instance.UserImage1 = String.Empty;
+                instance.UserImage2 = String.Empty;
 
                 return instance;
             }

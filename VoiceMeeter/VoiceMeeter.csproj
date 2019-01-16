@@ -72,6 +72,7 @@
     <Compile Include="StreamDeckOptions.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="VMAdvanced.cs" />
+    <Compile Include="VMAdvancedToggle.cs" />
     <Compile Include="VMManager.cs" />
     <Compile Include="VMMicrophone.cs" />
     <Compile Include="VMModify.cs" />
@@ -122,10 +123,16 @@
     <Content Include="PropertyInspector\Advanced.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="PropertyInspector\AdvancedToggle.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="PropertyInspector\Modify.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\VoiceMeeter\Advanced.html">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PropertyInspector\VoiceMeeter\AdvancedToggle.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\VoiceMeeter\Microphone.html">
