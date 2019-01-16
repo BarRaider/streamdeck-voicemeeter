@@ -1,7 +1,7 @@
 # streamdeck-voicemeeter
 VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
-## What's new in v0.6
+## What's new in v1.0
 ### 1.
 VoiceMeeter Advanced Plugin is now called *VoiceMeeter Advanced Click/Long-Click* to differentiate from the brand new *VoiceMeeter Advanced Toggle* plugin
 
