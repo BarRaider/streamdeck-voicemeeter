@@ -1,4 +1,5 @@
-﻿using CommandLine;
+﻿using BarRaider.SdTools;
+using CommandLine;
 using System;
 
 namespace VoiceMeeter

@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BarRaider.SdTools;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -84,6 +85,12 @@ namespace VoiceMeeter
 
         public void KeyPressed()
         {
+            if (!VMManager.Instance.IsConnected)
+            {
+                settings.ShowAlert();
+                return;
+            }
+
             bool isMode1 = IsMode1();
             if (isMode1 && !String.IsNullOrEmpty(settings.Mode2Value))
             {

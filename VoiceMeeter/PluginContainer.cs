@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BarRaider.SdTools;
+using Newtonsoft.Json;
 using streamdeck_client_csharp;
 using streamdeck_client_csharp.Events;
 using System;
@@ -99,7 +100,7 @@ namespace VoiceMeeter
                     }
                     else
                     {
-                        _ = connection.SetImageAsync(Properties.Plugin.Default.VMDefault, kvp.Key, SDKTarget.HardwareAndSoftware);
+                        _ = connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning, kvp.Key, SDKTarget.HardwareAndSoftware);
                     }
                 }
             }

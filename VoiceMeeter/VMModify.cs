@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BarRaider.SdTools;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
@@ -113,6 +114,12 @@ namespace VoiceMeeter
 
         public void KeyPressed()
         {
+            if (!VMManager.Instance.IsConnected)
+            {
+                settings.ShowAlert();
+                return;
+            }
+
             // Used for long press
             keyPressed = true;
             keyPressStart = DateTime.Now;

@@ -22,7 +22,7 @@ VoiceMeeter Advanced Plugin is now called *VoiceMeeter Advanced Click/Long-Click
 - See a live indication of the current status on Stream Deck (never forget your microphone on again!)
 - Can also be used to mute/unmute different Strips/Buses such as Spotify/Background music/etc.
 - Choose from 4 different icons to display the mute/unmute settings
-- **New in v0.6:** You can now choose your own images to display, instead of the 4 pre-defined icons
+- **New in v1.0:** You can now choose your own images to display, instead of the 4 pre-defined icons
 
 #### VoiceMeeter Modify Setting
 - Allows you to easily modify various VoiceMeeter settings

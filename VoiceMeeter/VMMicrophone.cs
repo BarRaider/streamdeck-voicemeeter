@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using BarRaider.SdTools;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 
@@ -90,6 +91,12 @@ namespace VoiceMeeter
 
         public void KeyPressed()
         {
+            if (!VMManager.Instance.IsConnected)
+            {
+                settings.ShowAlert();
+                return;
+            }
+
             switch (settings.MicType)
             {
                 case MicTypeEnum.SingleMode:
