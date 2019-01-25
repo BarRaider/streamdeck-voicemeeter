@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{A35FB18D-7867-4F77-A9F3-863BF6F18C6F}</ProjectGuid>
+    <ProjectGuid>{0D702B80-1750-4153-9DCC-1594D2CD46CC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>VoiceMeeter</RootNamespace>
     <AssemblyName>com.barraider.voicemeeter.sdPlugin</AssemblyName>
