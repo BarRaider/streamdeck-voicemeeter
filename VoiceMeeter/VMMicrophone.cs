@@ -124,7 +124,11 @@ namespace VoiceMeeter
         {
             settings.SetImageAsync(GetBase64ImageStatus());
         }
-      
+
+        public void Dispose()
+        {
+        }
+
         public void UpdateSettings(JObject payload)
         {
             if (payload["property_inspector"] != null)

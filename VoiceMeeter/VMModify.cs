@@ -151,6 +151,10 @@ namespace VoiceMeeter
             }
         }
 
+        public void Dispose()
+        {
+        }
+
         public void UpdateSettings(JObject payload)
         {
             if (payload["property_inspector"] != null)
