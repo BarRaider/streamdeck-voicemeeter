@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VoiceMeeter
 {
-    class VMAdvancedToggle : IPluginable
+    class VMAdvancedToggle : PluginBase
     {
         private enum TitleTypeEnum
         {
@@ -17,11 +17,11 @@ namespace VoiceMeeter
             None = 1
         }
 
-        private class InspectorSettings : SettingsBase
+        private class PluginSettings
         {
-            public static InspectorSettings CreateDefaultSettings()
+            public static PluginSettings CreateDefaultSettings()
             {
-                InspectorSettings instance = new InspectorSettings();
+                PluginSettings instance = new PluginSettings();
                 instance.Mode1Value = String.Empty;
                 instance.Mode1Param = String.Empty;
                 instance.Mode2Value = String.Empty;
@@ -57,37 +57,33 @@ namespace VoiceMeeter
 
         #region Private members
 
-        private InspectorSettings settings;
+        private PluginSettings settings;
 
         #endregion
 
         #region Public Methods
 
-        public VMAdvancedToggle(streamdeck_client_csharp.StreamDeckConnection connection, string action, string context, JObject settings)
+        public VMAdvancedToggle(SDConnection connection, JObject settings) : base(connection, settings)
         {
             if (settings == null || settings.Count == 0)
             {
-                this.settings = InspectorSettings.CreateDefaultSettings();
+                this.settings = PluginSettings.CreateDefaultSettings();
             }
             else
             {
-                this.settings = settings.ToObject<InspectorSettings>();
+                this.settings = settings.ToObject<PluginSettings>();
             }
-
-            this.settings.StreamDeckConnection = connection;
-            this.settings.ActionId = action;
-            this.settings.ContextId = context;
         }
 
         #endregion
 
         #region IPluginable
 
-        public void KeyPressed()
+        public async override void KeyPressed()
         {
             if (!VMManager.Instance.IsConnected)
             {
-                settings.ShowAlert();
+                await Connection.ShowAlert();
                 return;
             }
 
@@ -103,43 +99,43 @@ namespace VoiceMeeter
             }
         }
 
-        public void KeyReleased() {}
+        public override void KeyReleased() {}
 
-        public void OnTick()
+        public async override void OnTick()
         {
             // Set the image
             if (!String.IsNullOrEmpty(settings.UserImage1) && IsMode1())
             {
-                settings.SetImageAsync(Tools.FileToBase64(settings.UserImage1.ToString(), true));
+                await Connection.SetImageAsync(Tools.FileToBase64(settings.UserImage1.ToString(), true));
             }
             else if (!String.IsNullOrEmpty(settings.UserImage2))
             {
-                settings.SetImageAsync(Tools.FileToBase64(settings.UserImage2.ToString(), true));
+                await Connection.SetImageAsync(Tools.FileToBase64(settings.UserImage2.ToString(), true));
             }
 
             // Set the title
             if (settings.TitleType == TitleTypeEnum.VMLive && !String.IsNullOrEmpty(settings.TitleParam))
             {
-                settings.SetTitleAsync(VMManager.Instance.GetParam(settings.TitleParam));
+                await Connection.SetTitleAsync(VMManager.Instance.GetParam(settings.TitleParam));
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
         }
 
-        public void UpdateSettings(JObject payload)
+        public async override void UpdateSettings(JObject payload)
         {
             if (payload["property_inspector"] != null)
             {
                 switch (payload["property_inspector"].ToString().ToLower())
                 {
                     case "propertyinspectorconnected":
-                        settings.SendToPropertyInspectorAsync();
+                        await Connection.SendToPropertyInspectorAsync(JObject.FromObject(settings));
                         break;
 
                     case "propertyinspectorwilldisappear":
-                        settings.SetSettingsAsync();
+                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
                         break;
 
                     case "updatesettings":
@@ -150,7 +146,7 @@ namespace VoiceMeeter
                         settings.TitleParam = (string)payload["titleParam"];
                         settings.UserImage1 = Uri.UnescapeDataString(((string)payload["userImage1"]).Replace("C:\\fakepath\\", ""));
                         settings.UserImage2 = Uri.UnescapeDataString(((string)payload["userImage2"]).Replace("C:\\fakepath\\", ""));
-                        settings.SetSettingsAsync();
+                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
                         break;
                 }
             }

@@ -5,7 +5,7 @@ using System;
 
 namespace VoiceMeeter
 {
-    class VMMicrophone : IPluginable
+    class VMMicrophone : PluginBase
     {
         private enum MicTypeEnum
         {
@@ -23,11 +23,11 @@ namespace VoiceMeeter
             UserDefined = 4
         }
 
-        private class InspectorSettings : SettingsBase
+        private class PluginSettings
         {
-            public static InspectorSettings CreateDefaultSettings()
+            public static PluginSettings CreateDefaultSettings()
             {
-                InspectorSettings instance = new InspectorSettings();
+                PluginSettings instance = new PluginSettings();
                 instance.MicType = MicTypeEnum.Toggle;
                 instance.Strip = "Strip";
                 instance.StripNum = 0;
@@ -63,37 +63,33 @@ namespace VoiceMeeter
 
         #region Private members
 
-        private InspectorSettings settings;
+        private PluginSettings settings;
 
         #endregion
 
         #region Public Methods
 
-        public VMMicrophone(streamdeck_client_csharp.StreamDeckConnection connection, string action, string context, JObject settings)
+        public VMMicrophone(SDConnection connection, JObject settings) : base(connection, settings)
         {
             if (settings == null || settings.Count == 0)
             {
-                this.settings = InspectorSettings.CreateDefaultSettings();
+                this.settings = PluginSettings.CreateDefaultSettings();
             }
             else
             {
-                this.settings = settings.ToObject<InspectorSettings>();
+                this.settings = settings.ToObject<PluginSettings>();
             }
-
-            this.settings.StreamDeckConnection = connection;
-            this.settings.ActionId = action;
-            this.settings.ContextId = context;
         }
 
         #endregion
 
         #region IPluginable
 
-        public void KeyPressed()
+        public async override void KeyPressed()
         {
             if (!VMManager.Instance.IsConnected)
             {
-                settings.ShowAlert();
+                await Connection.ShowAlert();
                 return;
             }
 
@@ -112,7 +108,7 @@ namespace VoiceMeeter
             }
         }
 
-        public void KeyReleased()
+        public override void KeyReleased()
         {
             if (settings.MicType == MicTypeEnum.PTT)
             {
@@ -120,27 +116,27 @@ namespace VoiceMeeter
             }
         }
 
-        public void OnTick()
+        public async override void OnTick()
         {
-            settings.SetImageAsync(GetBase64ImageStatus());
+            await Connection.SetImageAsync(GetBase64ImageStatus());
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
         }
 
-        public void UpdateSettings(JObject payload)
+        public async override void UpdateSettings(JObject payload)
         {
             if (payload["property_inspector"] != null)
             {
                 switch (payload["property_inspector"].ToString().ToLower())
                 {
                     case "propertyinspectorconnected":
-                        settings.SendToPropertyInspectorAsync();
+                        await Connection.SendToPropertyInspectorAsync(JObject.FromObject(settings));
                         break;
 
                     case "propertyinspectorwilldisappear":
-                        settings.SetSettingsAsync();
+                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
                         break;
 
                     case "updatesettings":
@@ -151,7 +147,7 @@ namespace VoiceMeeter
                         settings.ImageType   = (ImageTypeEnum)Enum.Parse(typeof(ImageTypeEnum), (string)payload["imageType"]);
                         settings.UserImage1 = Uri.UnescapeDataString(((string)payload["userImage1"]).Replace("C:\\fakepath\\", ""));
                         settings.UserImage2 = Uri.UnescapeDataString(((string)payload["userImage2"]).Replace("C:\\fakepath\\", ""));
-                        settings.SetSettingsAsync();
+                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
                         break;
                 }
             }

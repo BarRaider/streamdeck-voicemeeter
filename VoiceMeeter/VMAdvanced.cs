@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace VoiceMeeter
 {
-    class VMAdvanced : IPluginable
+    class VMAdvanced : PluginBase
     {
         private enum TitleTypeEnum
         {
@@ -17,11 +17,11 @@ namespace VoiceMeeter
             None = 1
         }
 
-        private class InspectorSettings : SettingsBase
+        private class PluginSettings
         {
-            public static InspectorSettings CreateDefaultSettings()
+            public static PluginSettings CreateDefaultSettings()
             {
-                InspectorSettings instance = new InspectorSettings();
+                PluginSettings instance = new PluginSettings();
                 instance.SetValue = String.Empty;
                 instance.LongPressValue = String.Empty;
                 instance.TitleType = TitleTypeEnum.VMLive;
@@ -47,7 +47,7 @@ namespace VoiceMeeter
 
         private const int LONG_KEYPRESS_LENGTH = 1;
 
-        private InspectorSettings settings;
+        private PluginSettings settings;
         private bool keyPressed = false;
         private DateTime keyPressStart;
 
@@ -55,20 +55,16 @@ namespace VoiceMeeter
 
         #region Public Methods
 
-        public VMAdvanced(streamdeck_client_csharp.StreamDeckConnection connection, string action, string context, JObject settings)
+        public VMAdvanced(SDConnection connection, JObject settings) : base(connection, settings)
         {
             if (settings == null || settings.Count == 0)
             {
-                this.settings = InspectorSettings.CreateDefaultSettings();
+                this.settings = PluginSettings.CreateDefaultSettings();
             }
             else
             {
-                this.settings = settings.ToObject<InspectorSettings>();
+                this.settings = settings.ToObject<PluginSettings>();
             }
-
-            this.settings.StreamDeckConnection = connection;
-            this.settings.ActionId = action;
-            this.settings.ContextId = context;
         }
 
         public void LongKeyPressed()
@@ -83,7 +79,7 @@ namespace VoiceMeeter
 
         #region IPluginable
 
-        public void KeyPressed()
+        public async override void KeyPressed()
         {
             // Used for long press
             keyPressed = true;
@@ -91,7 +87,7 @@ namespace VoiceMeeter
 
             if (!VMManager.Instance.IsConnected)
             {
-                settings.ShowAlert();
+                await Connection.ShowAlert();
                 return;
             }
 
@@ -101,12 +97,12 @@ namespace VoiceMeeter
             }
         }
 
-        public void KeyReleased()
+        public override void KeyReleased()
         {
             keyPressed = false;
         }
 
-        public void OnTick()
+        public async override void OnTick()
         {
             // Stream Deck calls this function every second, 
             // so this is the best place to determine if we need to call the long keypress
@@ -117,26 +113,26 @@ namespace VoiceMeeter
 
             if (settings.TitleType == TitleTypeEnum.VMLive && !String.IsNullOrEmpty(settings.TitleParam))
             {
-                settings.SetTitleAsync(VMManager.Instance.GetParam(settings.TitleParam));
+                await Connection.SetTitleAsync(VMManager.Instance.GetParam(settings.TitleParam));
             }
         }
 
-        public void Dispose()
+        public override void Dispose()
         {
         }
 
-        public void UpdateSettings(JObject payload)
+        public async override void UpdateSettings(JObject payload)
         {
             if (payload["property_inspector"] != null)
             {
                 switch (payload["property_inspector"].ToString().ToLower())
                 {
                     case "propertyinspectorconnected":
-                        settings.SendToPropertyInspectorAsync();
+                        await Connection.SendToPropertyInspectorAsync(JObject.FromObject(settings));
                         break;
 
                     case "propertyinspectorwilldisappear":
-                        settings.SetSettingsAsync();
+                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
                         break;
 
                     case "updatesettings":
@@ -144,7 +140,7 @@ namespace VoiceMeeter
                         settings.LongPressValue = (string)payload["longPressValue"];
                         settings.TitleType = (TitleTypeEnum)Enum.Parse(typeof(TitleTypeEnum), (string)payload["titleType"]);
                         settings.TitleParam = (string)payload["titleParam"];
-                        settings.SetSettingsAsync();
+                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
                         break;
                 }
             }
