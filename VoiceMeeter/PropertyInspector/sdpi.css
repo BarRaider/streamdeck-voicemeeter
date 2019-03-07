@@ -1,3 +1,9 @@
+.linkspan {
+    cursor: pointer;
+    color: #7397d2;
+    text-decoration: underline;
+}
+
 html {
   --sdpi-bgcolor: #2D2D2D;
   --sdpi-background: #3D3D3D;

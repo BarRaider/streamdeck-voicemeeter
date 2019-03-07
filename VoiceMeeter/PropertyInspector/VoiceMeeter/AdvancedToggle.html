@@ -5,7 +5,7 @@
     <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
     <meta name=apple-mobile-web-app-capable content=yes>
     <meta name=apple-mobile-web-app-status-bar-style content=black>
-    <title>BarRaider's VM Modify Setting</title>
+    <title>BarRaider's VoiceMeeter Plugin</title>
     <link rel="stylesheet" href="../sdpi.css">
 </head>
 <body>
@@ -16,50 +16,54 @@
                 Example: "Strip[0].mono=1;Bus[2].Gain=-20;"
             </p>
             <p>
-                For more information or feedback/suggestions contact me at <a href="https://BarRaider.github.io" target="_blank" onclick="openWebsite()">https://BarRaider.github.io</a>
+                For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.github.io</span>
             </p>
         </details>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Mode1 Key Press</div>
-            <input class="sdpi-item-value" placeholder="Configuration to set when toggled to Mode1" value="" id="mode1Value" oninput="updateSettings()">
+            <input class="sdpi-item-value sdProperty" placeholder="Configuration to set when toggled to Mode1" value="" id="mode1Value" oninput="setSettings()">
         </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Mode1 Check</div>
-            <input class="sdpi-item-value" placeholder="Setting to check if we're in Mode1 or not" value="" id="mode1Param" oninput="updateSettings()">
+            <input class="sdpi-item-value sdProperty" placeholder="Setting to check if we're in Mode1 or not" value="" id="mode1Param" oninput="setSettings()">
         </div>
         <div class="sdpi-item" id="userIcon1_selector">
             <div class="sdpi-item-label">Mode1 image1</div>
             <div class="sdpi-item-group file" id="filepickergroup">
-                <input class="sdpi-item-value" type="file" id="userImage1" accept=".jpg, .jpeg, .png" oninput="updateSettings()">
-                <label class="sdpi-file-info " for="userImage1" id="userImage1_filename">No file...</label>
-                <label class="sdpi-file-label" for="userImage1" oninput="updateSettings()">Choose file...</label>
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="userImage1" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="userImage1" id="userImage1Filename">No file...</label>
+                <label class="sdpi-file-label" for="userImage1">Choose file...</label>
             </div>
         </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Mode2 Key Press</div>
-            <input class="sdpi-item-value" placeholder="Configuration to set when toggled to Mode2" value="" id="mode2Value" oninput="updateSettings()">
+            <input class="sdpi-item-value sdProperty" placeholder="Configuration to set when toggled to Mode2" value="" id="mode2Value" oninput="setSettings()">
         </div>
 
         <div class="sdpi-item" id="userIcon2_selector">
             <div class="sdpi-item-label">Mode2 image</div>
             <div class="sdpi-item-group file" id="filepickergroup2">
-                <input class="sdpi-item-value" type="file" id="userImage2" accept=".jpg, .jpeg, .png" oninput="updateSettings()">
-                <label class="sdpi-file-info " for="userImage2" id="userImage2_filename">No file...</label>
-                <label class="sdpi-file-label" for="userImage2" oninput="updateSettings()">Choose file...</label>
+                <input class="sdpi-item-value sdProperty" type="file" id="userImage2" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="userImage2" id="userImage2Filename">No file...</label>
+                <label class="sdpi-file-label" for="userImage2">Choose file...</label>
             </div>
         </div>
         <div class="sdpi-item" id="select_single">
             <div class="sdpi-item-label">Title</div>
-            <select class="sdpi-item-value select" id="titleType" oninput="updateSettings()" value="0">
+            <select class="sdpi-item-value select sdProperty" id="titleType" oninput="setSettings()" value="0">
                 <option value="0">VoiceMeeter Value</option>
                 <option value="1">-User Defined-</option>
             </select>
         </div>
         <div class="sdpi-item">
+            <div class="sdpi-item-label">Title Prefix</div>
+            <input class="sdpi-item-value sdProperty" placeholder="Text to add before the value" value="" id="titlePrefix" oninput="setSettings()">
+        </div>
+        <div class="sdpi-item">
             <div class="sdpi-item-label">Title Value</div>
-            <input class="sdpi-item-value" placeholder="Parameter to fetch and show on title" value="" id="titleParam" oninput="updateSettings()">
+            <input class="sdpi-item-value sdProperty" placeholder="Parameter to fetch and show on title" value="" id="titleParam" oninput="setSettings()">
         </div>
     </div>
-    <script src="../AdvancedToggle.js"></script>
+    <script src="../sdtools.common.js"></script>
 </body>
 </html>

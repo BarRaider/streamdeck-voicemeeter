@@ -8,6 +8,12 @@ using System.Timers;
 
 namespace VoiceMeeter
 {
+    internal enum TitleTypeEnum
+    {
+        VMLive = 0,
+        None = 1
+    }
+
     public sealed class VMManager
     {
         #region Private members
@@ -67,7 +73,7 @@ namespace VoiceMeeter
 
         public string GetParam(string paramName)
         {
-            return client.GetParam(paramName).ToString();
+            return client.GetParam(paramName).ToString("0.##");
         }
 
         public void SetParam(string paramName, float value)

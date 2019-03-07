@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace VoiceMeeter
 {
+    [PluginActionId("com.barraider.vmmodify")]
     class VMModify : PluginBase
     {
         private enum ParamTypeEnum
@@ -31,12 +32,6 @@ namespace VoiceMeeter
             audibility = 15
         }
 
-        private enum TitleTypeEnum
-        {
-            VMLive = 0,
-            None = 1
-        }
-
         private class PluginSettings
         {
             public static PluginSettings CreateDefaultSettings()
@@ -48,6 +43,7 @@ namespace VoiceMeeter
                 instance.SetValue = String.Empty;
                 instance.LongPressValue = String.Empty;
                 instance.TitleType = TitleTypeEnum.VMLive;
+                instance.TitlePrefix = String.Empty;
 
                 return instance;
             }
@@ -69,6 +65,9 @@ namespace VoiceMeeter
 
             [JsonProperty(PropertyName = "titleType")]
             public TitleTypeEnum TitleType { get; set; }
+
+            [JsonProperty(PropertyName = "titlePrefix")]
+            public string TitlePrefix { get; set; }
         }
 
         #region Private members
@@ -83,15 +82,16 @@ namespace VoiceMeeter
 
         #region Public Methods
 
-        public VMModify(SDConnection connection, JObject settings) : base(connection, settings)
+        public VMModify(SDConnection connection, InitialPayload payload) : base(connection, payload)
         {
-            if (settings == null || settings.Count == 0)
+            if (payload.Settings == null || payload.Settings.Count == 0)
             {
                 this.settings = PluginSettings.CreateDefaultSettings();
+                Connection.SetSettingsAsync(JObject.FromObject(settings));
             }
             else
             {
-                this.settings = settings.ToObject<PluginSettings>();
+                this.settings = payload.Settings.ToObject<PluginSettings>();
             }
         }
 
@@ -108,7 +108,7 @@ namespace VoiceMeeter
 
         #region PluginBase
 
-        public async override void KeyPressed()
+        public async override void KeyPressed(KeyPayload payload)
         {
             if (!VMManager.Instance.IsConnected)
             {
@@ -127,13 +127,19 @@ namespace VoiceMeeter
             }
         }
 
-        public override void KeyReleased()
+        public override void KeyReleased(KeyPayload payload)
         {
             keyPressed = false;
         }
 
         public async override void OnTick()
         {
+            if (!VMManager.Instance.IsConnected)
+            {
+                await Connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning);
+                return;
+            }
+                    
             // Stream Deck calls this function every second, 
             // so this is the best place to determine if we need to call the long keypress
             if (!String.IsNullOrEmpty(settings.LongPressValue) && keyPressed && (DateTime.Now - keyPressStart).TotalSeconds > LONG_KEYPRESS_LENGTH)
@@ -143,40 +149,26 @@ namespace VoiceMeeter
 
             if (settings.TitleType == TitleTypeEnum.VMLive)
             {
-                await Connection.SetTitleAsync(VMManager.Instance.GetParam(BuildDeviceName()));
-            }
-        }
-
-        public override void Dispose()
-        {
-        }
-
-        public async override void UpdateSettings(JObject payload)
-        {
-            if (payload["property_inspector"] != null)
-            {
-                switch (payload["property_inspector"].ToString().ToLower())
+                string prefix = String.Empty;
+                if (!String.IsNullOrEmpty(settings.TitlePrefix))
                 {
-                    case "propertyinspectorconnected":
-                        await Connection.SendToPropertyInspectorAsync(JObject.FromObject(settings));
-                        break;
-
-                    case "propertyinspectorwilldisappear":
-                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
-                        break;
-
-                    case "updatesettings":
-                        settings.ParamType = (ParamTypeEnum)Enum.Parse(typeof(ParamTypeEnum), (string)payload["paramType"]);
-                        settings.Strip = (string)payload["strip"];
-                        settings.StripNum = (int)payload["stripNum"];
-                        settings.SetValue = (string)payload["setValue"];
-                        settings.LongPressValue = (string)payload["longPressValue"];
-                        settings.TitleType = (TitleTypeEnum)Enum.Parse(typeof(TitleTypeEnum), (string)payload["titleType"]);
-                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
-                        break;
+                    prefix = settings.TitlePrefix.Replace(@"\n", "\n");
                 }
+
+                await Connection.SetTitleAsync($"{prefix}{VMManager.Instance.GetParam(BuildDeviceName())}");
             }
         }
+
+        public override void Dispose() { }
+
+        public override void ReceivedSettings(ReceivedSettingsPayload payload) 
+        {
+            // New in StreamDeck-Tools v2.0:
+            Tools.AutoPopulateSettings(settings, payload.Settings);
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
+        }
+
+        public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
 
         #endregion
 

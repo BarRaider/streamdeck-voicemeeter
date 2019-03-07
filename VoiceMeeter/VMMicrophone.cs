@@ -5,6 +5,7 @@ using System;
 
 namespace VoiceMeeter
 {
+    [PluginActionId("com.barraider.vmmicrophone")]
     class VMMicrophone : PluginBase
     {
         private enum MicTypeEnum
@@ -54,9 +55,11 @@ namespace VoiceMeeter
             [JsonProperty(PropertyName = "imageType")]
             public ImageTypeEnum ImageType { get; set; }
 
+            [FilenameProperty]
             [JsonProperty(PropertyName = "userImage1")]
             public string UserImage1 { get; set; }
 
+            [FilenameProperty]
             [JsonProperty(PropertyName = "userImage2")]
             public string UserImage2 { get; set; }
         }
@@ -69,15 +72,16 @@ namespace VoiceMeeter
 
         #region Public Methods
 
-        public VMMicrophone(SDConnection connection, JObject settings) : base(connection, settings)
+        public VMMicrophone(SDConnection connection, InitialPayload payload) : base(connection, payload)
         {
-            if (settings == null || settings.Count == 0)
+            if (payload.Settings == null || payload.Settings.Count == 0)
             {
                 this.settings = PluginSettings.CreateDefaultSettings();
+                Connection.SetSettingsAsync(JObject.FromObject(settings));
             }
             else
             {
-                this.settings = settings.ToObject<PluginSettings>();
+                this.settings = payload.Settings.ToObject<PluginSettings>();
             }
         }
 
@@ -85,7 +89,7 @@ namespace VoiceMeeter
 
         #region IPluginable
 
-        public async override void KeyPressed()
+        public async override void KeyPressed(KeyPayload payload)
         {
             if (!VMManager.Instance.IsConnected)
             {
@@ -96,7 +100,15 @@ namespace VoiceMeeter
             switch (settings.MicType)
             {
                 case MicTypeEnum.SingleMode:
-                    VMManager.Instance.SetParam(BuildDeviceName(), Convert.ToInt16(settings.SingleValue));
+                    int value;
+                    if (Int32.TryParse(settings.SingleValue, out value))
+                    {
+                        VMManager.Instance.SetParam(BuildDeviceName(), value);
+                    }
+                    else
+                    {
+                        await Connection.ShowAlert();
+                    }
                     break;
                 case MicTypeEnum.Toggle:
                     bool isMuted = VMManager.Instance.GetParamBool(BuildDeviceName());
@@ -108,7 +120,7 @@ namespace VoiceMeeter
             }
         }
 
-        public override void KeyReleased()
+        public override void KeyReleased(KeyPayload payload)
         {
             if (settings.MicType == MicTypeEnum.PTT)
             {
@@ -118,40 +130,28 @@ namespace VoiceMeeter
 
         public async override void OnTick()
         {
+            if (!VMManager.Instance.IsConnected)
+            {
+                await Connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning);
+                return;
+            }
+
             await Connection.SetImageAsync(GetBase64ImageStatus());
         }
 
-        public override void Dispose()
+        public override void Dispose() { }
+
+        public async override void ReceivedSettings(ReceivedSettingsPayload payload)
         {
+            // New in StreamDeck-Tools v2.0:
+            Tools.AutoPopulateSettings(settings, payload.Settings);
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
+
+            // Used to return the correct filename back to the Property Inspector
+            await Connection.SetSettingsAsync(JObject.FromObject(settings));
         }
 
-        public async override void UpdateSettings(JObject payload)
-        {
-            if (payload["property_inspector"] != null)
-            {
-                switch (payload["property_inspector"].ToString().ToLower())
-                {
-                    case "propertyinspectorconnected":
-                        await Connection.SendToPropertyInspectorAsync(JObject.FromObject(settings));
-                        break;
-
-                    case "propertyinspectorwilldisappear":
-                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
-                        break;
-
-                    case "updatesettings":
-                        settings.MicType     = (MicTypeEnum)Enum.Parse(typeof(MicTypeEnum), (string)payload["micType"]);
-                        settings.Strip       = (string)payload["strip"];
-                        settings.StripNum    = (int)payload["stripNum"];
-                        settings.SingleValue = (string)payload["singleValue"];
-                        settings.ImageType   = (ImageTypeEnum)Enum.Parse(typeof(ImageTypeEnum), (string)payload["imageType"]);
-                        settings.UserImage1 = Uri.UnescapeDataString(((string)payload["userImage1"]).Replace("C:\\fakepath\\", ""));
-                        settings.UserImage2 = Uri.UnescapeDataString(((string)payload["userImage2"]).Replace("C:\\fakepath\\", ""));
-                        await Connection.SetSettingsAsync(JObject.FromObject(settings));
-                        break;
-                }
-            }
-        }
+        public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
 
         #endregion
 
@@ -201,7 +201,6 @@ namespace VoiceMeeter
         {
             return $"{settings.Strip}[{settings.StripNum}].Mute";
         }
-
         #endregion
     }
 }

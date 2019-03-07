@@ -1,18 +1,12 @@
 # streamdeck-voicemeeter
 VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
-## What's new in v1.0
-### 1.
-VoiceMeeter Advanced Plugin is now called *VoiceMeeter Advanced Click/Long-Click* to differentiate from the brand new *VoiceMeeter Advanced Toggle* plugin
-
-### 2.
-#### Changes to "VoiceMeeter Mute/Unmute":
-- You can now choose your own images to display, instead of the 4 pre-defined icons
-
-### 3.
-#### "VoiceMeeter Advanced Toogle"
-- **Brand new plugin!**
-- Read below for full features list
+## What's new in v1.2
+- Brand new Action - The `Advanced PTT` action allows you to set a bunch of settings until you release the key. See the ***VoiceMeeter Advanced PTT*** section below
+- New `TitlePrefix` parameter allows you to add a prefix before showing the value on the key [ProTip: Type `\n` to make the title multi-line]
+- The *VoiceMeeter Advanced Click/Long-Click* is now called ***VoiceMeeter Advanced Press/Long-Press***
+- Added support to additional file types in the image picker
+- Improved Stability and small bug fixes
 
 ## Current functionality
 ### 4 Plugins built into one:
@@ -30,37 +24,39 @@ VoiceMeeter Advanced Plugin is now called *VoiceMeeter Advanced Click/Long-Click
 	* Options include modifying the: Gain slider, gate, comp,  mono button, solo button, audibility, color_x, color_y, eqgain1, eqgain2, eqgain3, fx_x, fx_y, mc,pan_x, pan_y
 	(Valid values can be found starting on page 9 of VoiceMeeter API PDF: https://download.vb-audio.com/Download_CABLE/VoicemeeterRemoteAPI.pdf )
 - Live feedback on the current value of that setting
-- Supports both Click and Long Click (allows you to toggle between two preset values for this setting)
-- Option to turn off the Live feedback and set the title to whatever you want
+- Supports both Press and Long Press (allows you to toggle between two preset values for this setting)
+- Option to turn off the Live feedback and set the title to whatever you want (including a prefix using the `TitlePrefix` parameter)
 
-#### VoiceMeeter Advanced Click/Long-Click
+
+#### VoiceMeeter Advanced Press/Long-Press
 - **Note:** This is for advanced users (you better know what you're doing)
 - Allows you to directly modify a whole set of settings
 - Example: `Strip[0].mono=1;Strip[1].Mute=1;Bus[2].Gain=-20;`
 	* Additional examples can be found on the VoiceMeeter forum: https://forum.vb-audio.com/viewtopic.php?f=8&t=346&sid=a773394396c10847fd6fd7e332a55e49#p495
 	and the VoiceMeeter API PDF: https://download.vb-audio.com/Download_CABLE/VoicemeeterRemoteAPI.pdf
-- Supports both Click and Long Click (allows you to change between two preset list of settings)
+- Supports both Press and Long Press (allows you to change between two preset list of settings)
 - Live feedback on whatever setting you choose
-- Option to turn off the Live feedback and set the title to whatever you want
+- Option to turn off the Live feedback and set the title to whatever you want (including a prefix using the `TitlePrefix` parameter)
 
 #### VoiceMeeter Advanced Toogle
 - **Note:** This is for advanced users (you better know what you're doing)
-- Focused on toggling between two modes (versus click and long click in the VoiceMeeter Advanced Click/Long-Click)
+- Focused on toggling between two modes (versus press and long press in the VoiceMeeter Advanced Press/Long-Press)
 - Example: `Strip[0].mono=1;Strip[1].Mute=1;Bus[2].Gain=-20;`
 	* Additional examples can be found on the VoiceMeeter forum: https://forum.vb-audio.com/viewtopic.php?f=8&t=346&sid=a773394396c10847fd6fd7e332a55e49#p495
 	and the VoiceMeeter API PDF: https://download.vb-audio.com/Download_CABLE/VoicemeeterRemoteAPI.pdf
 - Supports toggling between two preset list of settings
 - Supports different user-defined icons for each preset
 - Live feedback on whatever setting you choose
-- Option to turn off the Live feedback and set the title to whatever you want
+- Option to turn off the Live feedback and set the title to whatever you want (including a prefix using the `TitlePrefix` parameter)
 
-##### Advanced fields explained:
+### Fields explained:
 - Mode1 Key Press - The configuration to set when we're toggling into Mode1 -> Use this to turn ON the setting e.g. `Strip[0].Mute=1`
 - Mode1 Check - True/False value to determine if we're in Mode1. Example: If you input: `Strip[0].Mute` the plugin will determine you're in Mode1 every time Strip0 is muted.
 - Mode1 Image - Customizable image that will be shown when you're in Mode1
 - Mode2 Key Press - The configuration to set when we're toggling into Mode2 -> Use this to turn OFF the setting e.g. `Strip[0].Mute=0`
 - Mode2 Key Press - Customizable image that will be shown when you're in Mode1
 - Title - Used to determine if you want a dynamic title (Based on the "Title Value" field) or a static title (Based on the "Title field" at the very top)
+- Title Prefix - Text to add before displaying the `Title Value`. ProTip: Type `\n` to make the title multi-line
 - Title Value - Value to display in the title. Example: If you input: `Strip[0].Mono` it will display `1` when Mono is enabled on Strip0 and `0` otherwise.
 
 
@@ -74,19 +70,21 @@ A: This means that VoiceMeeter is either not running or not properly installed. 
 Q: What are the valid values for each setting?  
 A: Valid values can be found starting on page 9 of VoiceMeeter API PDF: https://download.vb-audio.com/Download_CABLE/VoicemeeterRemoteAPI.pdf
 
-## Dependencies
-- This library uses the [streamdeck-client-csharp](https://github.com/TyrenDe/streamdeck-client-csharp) wrapper
-- This library uses a modified version of [VoiceMeeterWrapper](https://github.com/tocklime/VoiceMeeterWrapper) and includes additional functionality
+Q: Can I make the title multi-line?
+A: Yes, write `\n` in the `Title Prefix` parameter to add lines
 
-## Feature roadmap
-Always open to more suggestions.
+## Dependencies
+This plugin uses the [StreamDeck-Tools](https://github.com/BarRaider/streamdeck-tools) v2.0
 
 ## How do I get started using it?
 Install by clicking the com.barraider.voicemeeter.streamDeckPlugin file in the Releases folder:
 https://github.com/BarRaider/streamdeck-voicemeeter/releases
 
 ## I found a bug, who do I contact?
-Just head over to the issues page and create a new issue.
+For support please contact the developer. Contact information is available at https://barraider.github.io
+
+## I have a feature request, who do I contact?
+Please contact the developer. Contact information is available at https://barraider.github.io
 
 ## License
 MIT License

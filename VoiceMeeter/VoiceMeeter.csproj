@@ -7,7 +7,7 @@
     <ProjectGuid>{0D702B80-1750-4153-9DCC-1594D2CD46CC}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>VoiceMeeter</RootNamespace>
-    <AssemblyName>com.barraider.voicemeeter.sdPlugin</AssemblyName>
+    <AssemblyName>com.barraider.voicemeeter</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -39,15 +39,26 @@
     <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.12.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
-    <Reference Include="streamdeck-client-csharp, Version=0.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\streamdeck-client-csharp.0.1.2-preview\lib\netstandard2.0\streamdeck-client-csharp.dll</HintPath>
+    <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\NLog.4.5.11\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="streamdeck-client-csharp, Version=4.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\streamdeck-client-csharp.4.1.0\lib\netstandard2.0\streamdeck-client-csharp.dll</HintPath>
+    </Reference>
+    <Reference Include="StreamDeckTools, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\StreamDeck-Tools.2.0.0\lib\net472\StreamDeckTools.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
-    <Reference Include="System.Drawing.Common, Version=4.0.1.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.Drawing.Common.4.6.0-preview.18571.3\lib\net461\System.Drawing.Common.dll</HintPath>
+    <Reference Include="System.Drawing.Common, Version=4.0.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\System.Drawing.Common.4.5.1\lib\net461\System.Drawing.Common.dll</HintPath>
     </Reference>
+    <Reference Include="System.IO.Compression" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -66,7 +77,8 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VMAdvanced.cs" />
+    <Compile Include="VMAdvancedPress.cs" />
+    <Compile Include="VMAdvancedPTT.cs" />
     <Compile Include="VMAdvancedToggle.cs" />
     <Compile Include="VMManager.cs" />
     <Compile Include="VMMicrophone.cs" />
@@ -85,12 +97,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Plugin1.Designer.cs</LastGenOutput>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\barraider-sdtools\barraider-sdtools\barraider-sdtools.csproj">
-      <Project>{dabbd97d-6687-4cbd-a19e-ac9ffa3cef03}</Project>
-      <Name>barraider-sdtools</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Images\categoryIcon%402x.png">
@@ -120,13 +126,10 @@
     <Content Include="Images\vmTop.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="PropertyInspector\Advanced.js">
+    <Content Include="PropertyInspector\sdtools.common.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="PropertyInspector\AdvancedToggle.js">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="PropertyInspector\Modify.js">
+    <Content Include="PropertyInspector\VoiceMeeter\AdvancedPTT.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\VoiceMeeter\Advanced.html">
@@ -136,9 +139,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\VoiceMeeter\Microphone.html">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="PropertyInspector\Microphone.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\sdpi.css">

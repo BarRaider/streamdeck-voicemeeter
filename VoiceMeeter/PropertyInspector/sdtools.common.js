@@ -1,114 +1,115 @@
-﻿var websocket = null,
+﻿// sdtools.common.js v1.0
+var websocket = null,
     uuid = null,
+    registerEventName = null,
     actionInfo = {},
     inInfo = {},
     runningApps = [],
     isQT = navigator.appVersion.includes('QtWebEngine');
 
-function connectSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
+function connectElgatoStreamDeckSocket(inPort, inUUID, inRegisterEvent, inInfo, inActionInfo) {
     uuid = inUUID;
+    registerEventName = inRegisterEvent;
+    console.log(inUUID, inActionInfo);
     actionInfo = JSON.parse(inActionInfo); // cache the info
     inInfo = JSON.parse(inInfo);
     websocket = new WebSocket('ws://localhost:' + inPort);
 
     addDynamicStyles(inInfo.colors);
 
-    websocket.onopen = function () {
-        var json = {
-            event: inRegisterEvent,
-            uuid: inUUID
-        };
+    websocket.onopen = websocketOnOpen;
+    websocket.onmessage = websocketOnMessage;
+    loadConfiguration(actionInfo.payload.settings);
+}
 
-        websocket.send(JSON.stringify(json));
-
-        // Notify the plugin that we are connected
-        sendValueToPlugin('propertyInspectorConnected', 'property_inspector');
+function websocketOnOpen() {
+    var json = {
+        event: registerEventName,
+        uuid: uuid
     };
+    websocket.send(JSON.stringify(json));
 
-    websocket.onmessage = function (evt) {
-        // Received message from Stream Deck
-        var jsonObj = JSON.parse(evt.data);
+    // Notify the plugin that we are connected
+    sendValueToPlugin('propertyInspectorConnected', 'property_inspector');
+}
 
-        if (jsonObj.event === 'sendToPropertyInspector') {
-            var payload = jsonObj.payload;
+function websocketOnMessage(evt) {
+    // Received message from Stream Deck
+    var jsonObj = JSON.parse(evt.data);
 
-            var micType = document.getElementById('micType');
-            micType.value = payload['micType'];
+    if (jsonObj.event === 'sendToPropertyInspector') {
+        var payload = jsonObj.payload;
+        loadConfiguration(payload);
+    }
+    else if (jsonObj.event === 'didReceiveSettings') {
+        var payload = jsonObj.payload;
+        loadConfiguration(payload.settings);
+    }
+    else {
+        console.log("Unhandled websocketOnMessage: " + jsonObj.event);
+    }
+}
 
-            var strip = document.getElementById('strip');
-            strip.value = payload['strip'];
-
-            var stripNum = document.getElementById('stripNum');
-            stripNum.value = payload['stripNum'];
-
-            var imageType = document.getElementById('imageType');
-            imageType.value = payload['imageType'];
-
-            var singleValue = document.getElementById('singleValue');
-            singleValue.value = payload['singleValue'];
-
-            var userImage1_filename = document.getElementById('userImage1_filename');
-            userImage1_filename.innerText = payload['userImage1'];
-            if (!userImage1_filename.innerText) {
-                userImage1_filename.innerText = "No file...";
+function loadConfiguration(payload) {
+    console.log('loadConfiguration');
+    console.log(payload);
+    for (var key in payload) {
+        try {
+            var elem = document.getElementById(key);
+            if (elem.classList.contains("sdCheckbox")) { // Checkbox
+                elem.checked = payload[key];
             }
+            else if (elem.classList.contains("sdFile")) { // File
+                var elemFile = document.getElementById(elem.id + "Filename");
+                elemFile.innerText = payload[key];
+                if (!elemFile.innerText) {
+                    elemFile.innerText = "No file...";
+                }
+            }
+            else { // Normal value
+                elem.value = payload[key];
+            }
+            console.log("Load: " + key + "=" + payload[key]);
+        }
+        catch (err) {
+            console.log("loadConfiguration failed for key: " + key + " - " + err);
+        }
+    }
+}
 
-            var userImage2_filename = document.getElementById('userImage2_filename');
-            userImage2_filename.innerText = payload['userImage2'];
-            if (!userImage2_filename.innerText) {
-                userImage2_filename.innerText = "No file...";
+function setSettings() {
+    var payload = {};
+    var elements = document.getElementsByClassName("sdProperty");
+
+    Array.prototype.forEach.call(elements, function (elem) {
+        var key = elem.id;
+        if (elem.classList.contains("sdCheckbox")) { // Checkbox
+            payload[key] = elem.checked;
+        }
+        else if (elem.classList.contains("sdFile")) { // File
+            var elemFile = document.getElementById(elem.id + "Filename");
+            payload[key] = elem.value;
+            if (!elem.value) {
+                // Fetch innerText if file is empty (happens when we lose and regain focus to this key)
+                payload[key] = elemFile.innerText;
+            }
+            else {
+                // Set value on initial file selection
+                elemFile.innerText = elem.value;
             }
         }
-    };
+        else { // Normal value
+            payload[key] = elem.value;
+        }
+        console.log("Save: " + key + "<=" + payload[key]);
+    });
+    setSettingsToPlugin(payload);
 }
 
-function updateSettings() {
-    var micType     = document.getElementById('micType');
-    var strip       = document.getElementById('strip');
-    var stripNum = document.getElementById('stripNum');
-    var imageType = document.getElementById('imageType');
-    var singleValue = document.getElementById('singleValue');
-    var userImage1 = document.getElementById('userImage1');
-    var userImage2 = document.getElementById('userImage2');
-    var userImage1_filename = document.getElementById('userImage1_filename');
-    var userImage2_filename = document.getElementById('userImage2_filename');
-
-    var payload = {};
-
-    payload.property_inspector = 'updateSettings';
-    payload.micType     = micType.value;
-    payload.strip       = strip.value;
-    payload.stripNum    = stripNum.value;
-    payload.imageType   = imageType.value;
-    payload.singleValue = singleValue.value;
-    payload.userImage1  = userImage1.value;
-    if (!userImage1.value) {
-        // Fetch innerText if file is empty (happens when we lose and regain focus to this key)
-        payload.userImage1 = userImage1_filename.innerText;
-    }
-    else {
-        // Set value on initial file selction
-        userImage1_filename.innerText = userImage1.value;
-    }
-
-    payload.userImage2 = userImage2.value;
-    if (!userImage2.value) {
-        // Fetch innerText if file is empty (happens when we lose and regain focus to this key)
-        payload.userImage2 = userImage2_filename.innerText;
-    }
-    else {
-        // Set value on initial file selction
-        userImage2_filename.innerText = userImage2.value;
-    }
-
-    sendPayloadToPlugin(payload);
-}
-
-function sendPayloadToPlugin(payload) {
+function setSettingsToPlugin(payload) {
     if (websocket && (websocket.readyState === 1)) {
         const json = {
-            'action': actionInfo['action'],
-            'event': 'sendToPlugin',
+            'event': 'setSettings',
             'context': uuid,
             'payload': payload
         };

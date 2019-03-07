@@ -9,42 +9,28 @@ using System.Threading.Tasks;
 
 namespace VoiceMeeter
 {
-    [PluginActionId("com.barraider.vmadvancedtoggle")]
-    class VMAdvancedToggle : PluginBase
+    [PluginActionId("com.barraider.vmadvancedptt")]
+    public class VMAdvancedPTT : PluginBase
     {
         private class PluginSettings
         {
             public static PluginSettings CreateDefaultSettings()
             {
                 PluginSettings instance = new PluginSettings();
-                instance.Mode1Value = String.Empty;
-                instance.Mode1Param = String.Empty;
-                instance.Mode2Value = String.Empty;
+                instance.KeyPressValue = String.Empty;
+                instance.KeyReleaseValue = String.Empty;
                 instance.TitleType = TitleTypeEnum.VMLive;
                 instance.TitleParam = String.Empty;
-                instance.UserImage1 = String.Empty;
-                instance.UserImage2 = String.Empty;
                 instance.TitlePrefix = String.Empty;
 
                 return instance;
             }
 
-            [JsonProperty(PropertyName = "mode1Value")]
-            public string Mode1Value { get; set; }
+            [JsonProperty(PropertyName = "keyPressValue")]
+            public string KeyPressValue { get; set; }
 
-            [JsonProperty(PropertyName = "mode1Param")]
-            public string Mode1Param { get; set; }
-
-            [JsonProperty(PropertyName = "mode2Value")]
-            public string Mode2Value { get; set; }
-
-            [FilenameProperty]
-            [JsonProperty(PropertyName = "userImage1")]
-            public string UserImage1 { get; set; }
-
-            [FilenameProperty]
-            [JsonProperty(PropertyName = "userImage2")]
-            public string UserImage2 { get; set; }
+            [JsonProperty(PropertyName = "keyReleaseValue")]
+            public string KeyReleaseValue { get; set; }
 
             [JsonProperty(PropertyName = "titleType")]
             public TitleTypeEnum TitleType { get; set; }
@@ -64,7 +50,7 @@ namespace VoiceMeeter
 
         #region Public Methods
 
-        public VMAdvancedToggle(SDConnection connection, InitialPayload payload) : base(connection, payload)
+        public VMAdvancedPTT(SDConnection connection, InitialPayload payload) : base(connection, payload)
         {
             if (payload.Settings == null || payload.Settings.Count == 0)
             {
@@ -77,10 +63,6 @@ namespace VoiceMeeter
             }
         }
 
-        #endregion
-
-        #region IPluginable
-
         public async override void KeyPressed(KeyPayload payload)
         {
             if (!VMManager.Instance.IsConnected)
@@ -89,19 +71,19 @@ namespace VoiceMeeter
                 return;
             }
 
-            bool isMode1 = IsMode1();
-            if (isMode1 && !String.IsNullOrEmpty(settings.Mode2Value))
+            if (!String.IsNullOrEmpty(settings.KeyPressValue))
             {
-                VMManager.Instance.SetParameters(settings.Mode2Value);
-            }
-            // Current in Mode2
-            else if(!isMode1 && !String.IsNullOrEmpty(settings.Mode1Value))
-            {
-                VMManager.Instance.SetParameters(settings.Mode1Value);
+                VMManager.Instance.SetParameters(settings.KeyPressValue);
             }
         }
 
-        public override void KeyReleased(KeyPayload payload) { }
+        public override void KeyReleased(KeyPayload payload)
+        {
+            if (!String.IsNullOrEmpty(settings.KeyReleaseValue))
+            {
+                VMManager.Instance.SetParameters(settings.KeyReleaseValue);
+            }
+        }
 
         public async override void OnTick()
         {
@@ -111,17 +93,6 @@ namespace VoiceMeeter
                 return;
             }
 
-            // Set the image
-            if (!String.IsNullOrEmpty(settings.UserImage1) && IsMode1())
-            {
-                await Connection.SetImageAsync(Tools.FileToBase64(settings.UserImage1.ToString(), true));
-            }
-            else if (!String.IsNullOrEmpty(settings.UserImage2))
-            {
-                await Connection.SetImageAsync(Tools.FileToBase64(settings.UserImage2.ToString(), true));
-            }
-
-            // Set the title
             if (settings.TitleType == TitleTypeEnum.VMLive && !String.IsNullOrEmpty(settings.TitleParam))
             {
                 string prefix = String.Empty;
@@ -134,33 +105,17 @@ namespace VoiceMeeter
             }
         }
 
-        public override void Dispose() { }
-        
-        public async override void ReceivedSettings(ReceivedSettingsPayload payload)
+        public override void ReceivedSettings(ReceivedSettingsPayload payload)
         {
             // New in StreamDeck-Tools v2.0:
             Tools.AutoPopulateSettings(settings, payload.Settings);
             Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
-
-            // Used to return the correct filename back to the Property Inspector
-            await Connection.SetSettingsAsync(JObject.FromObject(settings));
         }
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
 
-        #endregion
+        public override void Dispose() { }
 
-        #region Private Methods
-
-        private bool IsMode1()
-        {
-            if (!String.IsNullOrEmpty(settings.Mode1Param))
-            {
-                return VMManager.Instance.GetParamBool(settings.Mode1Param);
-            }
-
-            return false;
-        }
         #endregion
     }
 }
