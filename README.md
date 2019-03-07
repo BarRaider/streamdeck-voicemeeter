@@ -8,6 +8,9 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 - Added support to additional file types in the image picker
 - Improved Stability and small bug fixes
 
+### Download:
+https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.2
+
 ## Current functionality
 ### 4 Plugins built into one:
 #### VoiceMeeter Mute/Unmute
