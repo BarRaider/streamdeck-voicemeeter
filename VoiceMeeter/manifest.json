@@ -81,7 +81,7 @@
   "Name": "VoiceMeeter Integration",
   "Icon": "Images/pluginIcon",
   "URL": "https://barraider.github.io/",
-  "Version": "1.2",
+  "Version": "1.3",
   "CodePath": "com.barraider.voicemeeter.exe",
   "Category": "BarRaider",
   "CategoryIcon": "Images/categoryIcon",

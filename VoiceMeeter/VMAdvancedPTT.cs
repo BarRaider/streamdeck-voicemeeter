@@ -114,7 +114,10 @@ namespace VoiceMeeter
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
 
-        public override void Dispose() { }
+        public override void Dispose()
+        {
+            Logger.Instance.LogMessage(TracingLevel.INFO, "Destructor called");
+        }
 
         #endregion
     }

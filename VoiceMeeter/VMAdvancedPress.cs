@@ -136,7 +136,10 @@ namespace VoiceMeeter
             }
         }
 
-        public override void Dispose() { }
+        public override void Dispose()
+        {
+            Logger.Instance.LogMessage(TracingLevel.INFO, "Destructor called");
+        }
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
 

@@ -139,7 +139,10 @@ namespace VoiceMeeter
             await Connection.SetImageAsync(GetBase64ImageStatus());
         }
 
-        public override void Dispose() { }
+        public override void Dispose()
+        {
+            Logger.Instance.LogMessage(TracingLevel.INFO, "Destructor called");
+        }
 
         public async override void ReceivedSettings(ReceivedSettingsPayload payload)
         {
