@@ -1,6 +1,9 @@
 # streamdeck-voicemeeter
 VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
+## What's new in v1.3
+- Bug fix to support VM Advanced Press inside MultiActions
+
 ## What's new in v1.2
 - Brand new Action - The `Advanced PTT` action allows you to set a bunch of settings until you release the key. See the ***VoiceMeeter Advanced PTT*** section below
 - New `TitlePrefix` parameter allows you to add a prefix before showing the value on the key [ProTip: Type `\n` to make the title multi-line]
@@ -8,8 +11,9 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 - Added support to additional file types in the image picker
 - Improved Stability and small bug fixes
 
+
 ### Download:
-https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.2
+https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.3
 
 ## Current functionality
 ### 4 Plugins built into one:
