@@ -36,7 +36,7 @@ https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.3
 
 
 #### VoiceMeeter Advanced Press/Long-Press
-- **Note:** This is for advanced users (you better know what you're doing)
+- **Note:** This is for advanced users but there are explanations under the ***Fields explained*** section below
 - Allows you to directly modify a whole set of settings
 - Example: `Strip[0].mono=1;Strip[1].Mute=1;Bus[2].Gain=-20;`
 	* Additional examples can be found on the VoiceMeeter forum: https://forum.vb-audio.com/viewtopic.php?f=8&t=346&sid=a773394396c10847fd6fd7e332a55e49#p495
@@ -46,8 +46,9 @@ https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.3
 - Option to turn off the Live feedback and set the title to whatever you want (including a prefix using the `TitlePrefix` parameter)
 
 #### VoiceMeeter Advanced Toogle
-- **Note:** This is for advanced users (you better know what you're doing)
+- **Note:** This is for advanced users but there are explanations under the ***Fields explained*** section below
 - Focused on toggling between two modes (versus press and long press in the VoiceMeeter Advanced Press/Long-Press)
+- Mode1 should always turn things ON and Mode2 should turn things OFF
 - Example: `Strip[0].mono=1;Strip[1].Mute=1;Bus[2].Gain=-20;`
 	* Additional examples can be found on the VoiceMeeter forum: https://forum.vb-audio.com/viewtopic.php?f=8&t=346&sid=a773394396c10847fd6fd7e332a55e49#p495
 	and the VoiceMeeter API PDF: https://download.vb-audio.com/Download_CABLE/VoicemeeterRemoteAPI.pdf
