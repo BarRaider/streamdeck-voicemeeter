@@ -1,6 +1,8 @@
 # streamdeck-voicemeeter
 VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
+**Author's website and contact information:** [https://barraider.github.io](https://barraider.github.io)
+
 ## What's new in v1.4
 - Bug fix in Advanced Press/Long-Press action: No longer triggers the Short Press when trying to enable the Long Press.
 
@@ -14,9 +16,8 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 - Added support to additional file types in the image picker
 - Improved Stability and small bug fixes
 
-
 ### Download:
-https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.3
+https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.4
 
 ## Current functionality
 ### 4 Plugins built into one:
