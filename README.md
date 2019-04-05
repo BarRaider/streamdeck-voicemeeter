@@ -1,6 +1,9 @@
 # streamdeck-voicemeeter
 VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
+## What's new in v1.4
+- Bug fix in Advanced Press/Long-Press action: No longer triggers the Short Press when trying to enable the Long Press.
+
 ## What's new in v1.3
 - Bug fix to support VM Advanced Press inside MultiActions
 
