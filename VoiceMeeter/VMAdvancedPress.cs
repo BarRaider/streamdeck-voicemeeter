@@ -39,7 +39,7 @@ namespace VoiceMeeter
             public string TitleParam { get; set; }
 
             [JsonProperty(PropertyName = "titlePrefix")]
-            public string TitlePrefix{ get; set; }
+            public string TitlePrefix { get; set; }
         }
 
         #region Private members
@@ -48,6 +48,7 @@ namespace VoiceMeeter
 
         private PluginSettings settings;
         private bool keyPressed = false;
+        private bool longKeyPressed = false;
         private DateTime keyPressStart;
 
         #endregion
@@ -69,6 +70,7 @@ namespace VoiceMeeter
 
         public void LongKeyPressed()
         {
+            longKeyPressed = true;
             if (!String.IsNullOrEmpty(settings.LongPressValue))
             {
                 VMManager.Instance.SetParameters(settings.LongPressValue);
@@ -90,6 +92,7 @@ namespace VoiceMeeter
         {
             // Used for long press
             keyPressed = true;
+            longKeyPressed = false;
             keyPressStart = DateTime.Now;
 
             if (!VMManager.Instance.IsConnected)
@@ -97,16 +100,16 @@ namespace VoiceMeeter
                 await Connection.ShowAlert();
                 return;
             }
-
-            if (!String.IsNullOrEmpty(settings.SetValue))
-            {
-                VMManager.Instance.SetParameters(settings.SetValue);
-            }
         }
 
         public override void KeyReleased(KeyPayload payload)
         {
             keyPressed = false;
+
+            if (!longKeyPressed && !String.IsNullOrEmpty(settings.SetValue))
+            {
+                VMManager.Instance.SetParameters(settings.SetValue);
+            }
         }
 
         public async override void OnTick()
@@ -119,7 +122,7 @@ namespace VoiceMeeter
 
             // Stream Deck calls this function every second, 
             // so this is the best place to determine if we need to call the long keypress
-            if (!String.IsNullOrEmpty(settings.LongPressValue) && keyPressed && (DateTime.Now - keyPressStart).TotalSeconds > LONG_KEYPRESS_LENGTH)
+            if (!String.IsNullOrEmpty(settings.LongPressValue) && keyPressed && (DateTime.Now - keyPressStart).TotalSeconds >= LONG_KEYPRESS_LENGTH)
             {
                 LongKeyPressed();
             }
