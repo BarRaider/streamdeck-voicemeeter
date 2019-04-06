@@ -3,8 +3,8 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
 **Author's website and contact information:** [https://barraider.github.io](https://barraider.github.io)
 
-## What's new in v1.4
-- Bug fix in Advanced Press/Long-Press action: No longer triggers the Short Press when trying to enable the Long Press.
+## What's new in v1.5
+- Bug fixes in VMModify and in Advanced Press/Long-Press actions: No longer triggers the Short Press when trying to enable the Long Press.
 
 ## What's new in v1.3
 - Bug fix to support VM Advanced Press inside MultiActions
