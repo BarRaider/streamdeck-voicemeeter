@@ -17,7 +17,7 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 - Improved Stability and small bug fixes
 
 ### Download:
-https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.4
+https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.5
 
 ## Current functionality
 ### 4 Plugins built into one:
