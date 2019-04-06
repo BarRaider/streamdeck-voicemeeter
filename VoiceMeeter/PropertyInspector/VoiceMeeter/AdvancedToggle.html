@@ -10,15 +10,19 @@
 </head>
 <body>
     <div class="sdpi-wrapper">
-        <details class="message question">
-            <summary>Toggle between Mode1 and Mode2 by pressing the button (click this text for more info...)</summary>
-            <p>
-                Example: "Strip[0].mono=1;Bus[2].Gain=-20;"
-            </p>
-            <p>
-                For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.github.io</span>
-            </p>
-        </details>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Instructions</div>
+            <details class="message">
+                <summary>Toggle between Mode1 and Mode2 by pressing the button (click this text for more info...)</summary>
+                <p>
+                    Mode1 is used to turn things ON. Mode 2 is used to turn things OFF.<br />
+                    Example: Lets use Mode1 to turn Mono on (and do aditional things): "Strip[0].mono=1;Bus[2].Gain=-20;"<br />
+                    Now "Mode1 Check" should be: "Strip[0].mono"<br />
+                    Mode2 should turn mono Off: "Strip[0].mono=0;Bus[2].Gain=-10;..."<br /><br />
+                    Additional examples in the project page.
+                </p>
+            </details>
+        </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Mode1 Key Press</div>
             <input class="sdpi-item-value sdProperty" placeholder="Configuration to set when toggled to Mode1" value="" id="mode1Value" oninput="setSettings()">
@@ -63,6 +67,9 @@
             <div class="sdpi-item-label">Title Value</div>
             <input class="sdpi-item-value sdProperty" placeholder="Parameter to fetch and show on title" value="" id="titleParam" oninput="setSettings()">
         </div>
+        <details class="message">
+            <summary>For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.github.io</span> </summary>
+        </details>
     </div>
     <script src="../sdtools.common.js"></script>
 </body>

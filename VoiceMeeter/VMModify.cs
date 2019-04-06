@@ -76,6 +76,7 @@ namespace VoiceMeeter
 
         private PluginSettings settings;
         private bool keyPressed = false;
+        private bool longKeyPressed = false;
         private DateTime keyPressStart;
 
         #endregion
@@ -97,6 +98,7 @@ namespace VoiceMeeter
 
         public void LongKeyPressed()
         {
+            longKeyPressed = true;
             float value;
             if (!String.IsNullOrEmpty(settings.LongPressValue) && float.TryParse(settings.LongPressValue, out value))
             {
@@ -118,18 +120,22 @@ namespace VoiceMeeter
 
             // Used for long press
             keyPressed = true;
+            longKeyPressed = false;
             keyPressStart = DateTime.Now;
-
-            float value;
-            if (!String.IsNullOrEmpty(settings.SetValue) && float.TryParse(settings.SetValue, out value))
-            {
-                VMManager.Instance.SetParam(BuildDeviceName(), value);
-            }
         }
 
         public override void KeyReleased(KeyPayload payload)
         {
             keyPressed = false;
+
+            if (!longKeyPressed)
+            {
+                float value;
+                if (!String.IsNullOrEmpty(settings.SetValue) && float.TryParse(settings.SetValue, out value))
+                {
+                    VMManager.Instance.SetParam(BuildDeviceName(), value);
+                }
+            }
         }
 
         public async override void OnTick()
