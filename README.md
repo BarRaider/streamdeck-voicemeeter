@@ -3,7 +3,7 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
 **Author's website and contact information:** [https://barraider.github.io](https://barraider.github.io)
 
-## What's new in 1.6
+## What's new in 1.7
 - VM Advanced actions now support renaming values that show 1 / 0 to a user-defined text (On/Off or Enabled/Disabled, etc.)
 - Bugfix in which the second image was not stored correctly in the VM Advanced Toggle action
 - Moved actions to a "VoiceMeeter" category in the Stream Deck app
