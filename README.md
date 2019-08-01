@@ -3,24 +3,16 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
 **Author's website and contact information:** [https://barraider.github.io](https://barraider.github.io)
 
-## What's new in v1.5
-- Bug fixes in VMModify and in Advanced Press/Long-Press actions: No longer triggers the Short Press when trying to enable the Long Press.
-
-## What's new in v1.3
-- Bug fix to support VM Advanced Press inside MultiActions
-
-## What's new in v1.2
-- Brand new Action - The `Advanced PTT` action allows you to set a bunch of settings until you release the key. See the ***VoiceMeeter Advanced PTT*** section below
-- New `TitlePrefix` parameter allows you to add a prefix before showing the value on the key [ProTip: Type `\n` to make the title multi-line]
-- The *VoiceMeeter Advanced Click/Long-Click* is now called ***VoiceMeeter Advanced Press/Long-Press***
-- Added support to additional file types in the image picker
-- Improved Stability and small bug fixes
+## What's new in 1.6
+- VM Advanced actions now support renaming values that show 1 / 0 to a user-defined text (On/Off or Enabled/Disabled, etc.)
+- Bugfix in which the second image was not stored correctly in the VM Advanced Toggle action
+- Moved actions to a "VoiceMeeter" category in the Stream Deck app
 
 ### Download:
-https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.5
+https://github.com/BarRaider/streamdeck-voicemeeter/releases/
 
 ## Current functionality
-### 4 Plugins built into one:
+### 5 Plugins built into one:
 #### VoiceMeeter Mute/Unmute
 - Allows you to easily connect to one of VoiceMeeter's Strips or Buses
 - 3 different modes: Toggle/Push-To-Talk/Single Setting (on/off)
@@ -37,7 +29,6 @@ https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.5
 - Live feedback on the current value of that setting
 - Supports both Press and Long Press (allows you to toggle between two preset values for this setting)
 - Option to turn off the Live feedback and set the title to whatever you want (including a prefix using the `TitlePrefix` parameter)
-
 
 #### VoiceMeeter Advanced Press/Long-Press
 - **Note:** This is for advanced users but there are explanations under the ***Fields explained*** section below
@@ -60,6 +51,9 @@ https://github.com/BarRaider/streamdeck-voicemeeter/releases/tag/v1.5
 - Supports different user-defined icons for each preset
 - Live feedback on whatever setting you choose
 - Option to turn off the Live feedback and set the title to whatever you want (including a prefix using the `TitlePrefix` parameter)
+
+#### VoiceMeeter Advanced PTT
+The `Advanced PTT` action allows you to set a bunch of settings until you release the key. 
 
 ### Fields explained:
 - Mode1 Key Press - The configuration to set when we're toggling into Mode1 -> Use this to turn ON the setting e.g. `Strip[0].Mute=1`

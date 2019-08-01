@@ -22,6 +22,8 @@ namespace VoiceMeeter
                 instance.TitleType = TitleTypeEnum.VMLive;
                 instance.TitleParam = String.Empty;
                 instance.TitlePrefix = String.Empty;
+                instance.EnabledText = String.Empty;
+                instance.DisabledText = String.Empty;
 
                 return instance;
             }
@@ -40,6 +42,12 @@ namespace VoiceMeeter
 
             [JsonProperty(PropertyName = "titlePrefix")]
             public string TitlePrefix { get; set; }
+
+            [JsonProperty(PropertyName = "enabledText")]
+            public string EnabledText { get; set; }
+
+            [JsonProperty(PropertyName = "disabledText")]
+            public string DisabledText { get; set; }
         }
 
         #region Private members
@@ -101,7 +109,17 @@ namespace VoiceMeeter
                     prefix = settings.TitlePrefix.Replace(@"\n", "\n");
                 }
 
-                await Connection.SetTitleAsync($"{prefix}{VMManager.Instance.GetParam(settings.TitleParam)}");
+                string value = VMManager.Instance.GetParam(settings.TitleParam);
+                if (!String.IsNullOrEmpty(settings.EnabledText) && !String.IsNullOrEmpty(value) && value == Constants.ENABLED_VALUE)
+                {
+                    value = settings.EnabledText;
+                }
+                else if (!String.IsNullOrEmpty(settings.DisabledText) && !String.IsNullOrEmpty(value) && value == Constants.DISABLED_VALUE)
+                {
+                    value = settings.DisabledText;
+                }
+
+                await Connection.SetTitleAsync($"{prefix}{value}");
             }
         }
 
