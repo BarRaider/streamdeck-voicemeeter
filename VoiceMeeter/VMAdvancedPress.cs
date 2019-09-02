@@ -16,14 +16,16 @@ namespace VoiceMeeter
         {
             public static PluginSettings CreateDefaultSettings()
             {
-                PluginSettings instance = new PluginSettings();
-                instance.SetValue = String.Empty;
-                instance.LongPressValue = String.Empty;
-                instance.TitleType = TitleTypeEnum.VMLive;
-                instance.TitleParam = String.Empty;
-                instance.TitlePrefix = String.Empty;
-                instance.EnabledText = String.Empty;
-                instance.DisabledText = String.Empty;
+                PluginSettings instance = new PluginSettings
+                {
+                    SetValue = String.Empty,
+                    LongPressValue = String.Empty,
+                    TitleType = TitleTypeEnum.VMLive,
+                    TitleParam = String.Empty,
+                    TitlePrefix = String.Empty,
+                    EnabledText = String.Empty,
+                    DisabledText = String.Empty
+                };
 
                 return instance;
             }
@@ -54,7 +56,7 @@ namespace VoiceMeeter
 
         private const int LONG_KEYPRESS_LENGTH = 1;
 
-        private PluginSettings settings;
+        private readonly PluginSettings settings;
         private bool keyPressed = false;
         private bool longKeyPressed = false;
         private DateTime keyPressStart;

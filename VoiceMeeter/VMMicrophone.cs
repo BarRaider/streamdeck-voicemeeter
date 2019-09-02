@@ -28,14 +28,16 @@ namespace VoiceMeeter
         {
             public static PluginSettings CreateDefaultSettings()
             {
-                PluginSettings instance = new PluginSettings();
-                instance.MicType = MicTypeEnum.Toggle;
-                instance.Strip = "Strip";
-                instance.StripNum = 0;
-                instance.SingleValue = String.Empty;
-                instance.ImageType = ImageTypeEnum.Microphone;
-                instance.UserImage1 = String.Empty;
-                instance.UserImage2 = String.Empty;
+                PluginSettings instance = new PluginSettings
+                {
+                    MicType = MicTypeEnum.Toggle,
+                    Strip = "Strip",
+                    StripNum = 0,
+                    SingleValue = String.Empty,
+                    ImageType = ImageTypeEnum.Microphone,
+                    UserImage1 = String.Empty,
+                    UserImage2 = String.Empty
+                };
 
                 return instance;
             }
@@ -66,7 +68,7 @@ namespace VoiceMeeter
 
         #region Private members
 
-        private PluginSettings settings;
+        private readonly PluginSettings settings;
 
         #endregion
 

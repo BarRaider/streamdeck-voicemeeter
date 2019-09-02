@@ -36,14 +36,16 @@ namespace VoiceMeeter
         {
             public static PluginSettings CreateDefaultSettings()
             {
-                PluginSettings instance = new PluginSettings();
-                instance.ParamType = ParamTypeEnum.gain;
-                instance.Strip = "Strip";
-                instance.StripNum = 0;
-                instance.SetValue = String.Empty;
-                instance.LongPressValue = String.Empty;
-                instance.TitleType = TitleTypeEnum.VMLive;
-                instance.TitlePrefix = String.Empty;
+                PluginSettings instance = new PluginSettings
+                {
+                    ParamType = ParamTypeEnum.gain,
+                    Strip = "Strip",
+                    StripNum = 0,
+                    SetValue = String.Empty,
+                    LongPressValue = String.Empty,
+                    TitleType = TitleTypeEnum.VMLive,
+                    TitlePrefix = String.Empty
+                };
 
                 return instance;
             }
@@ -74,7 +76,7 @@ namespace VoiceMeeter
 
         private const int LONG_KEYPRESS_LENGTH = 1;
 
-        private PluginSettings settings;
+        private readonly PluginSettings settings;
         private bool keyPressed = false;
         private bool longKeyPressed = false;
         private DateTime keyPressStart;
@@ -99,8 +101,7 @@ namespace VoiceMeeter
         public void LongKeyPressed()
         {
             longKeyPressed = true;
-            float value;
-            if (!String.IsNullOrEmpty(settings.LongPressValue) && float.TryParse(settings.LongPressValue, out value))
+            if (!String.IsNullOrEmpty(settings.LongPressValue) && float.TryParse(settings.LongPressValue, out float value))
             {
                 VMManager.Instance.SetParam(BuildDeviceName(), value);
             }
@@ -130,8 +131,7 @@ namespace VoiceMeeter
 
             if (!longKeyPressed)
             {
-                float value;
-                if (!String.IsNullOrEmpty(settings.SetValue) && float.TryParse(settings.SetValue, out value))
+                if (!String.IsNullOrEmpty(settings.SetValue) && float.TryParse(settings.SetValue, out float value))
                 {
                     VMManager.Instance.SetParam(BuildDeviceName(), value);
                 }

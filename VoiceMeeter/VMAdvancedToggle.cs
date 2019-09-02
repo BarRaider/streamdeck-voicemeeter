@@ -16,17 +16,19 @@ namespace VoiceMeeter
         {
             public static PluginSettings CreateDefaultSettings()
             {
-                PluginSettings instance = new PluginSettings();
-                instance.Mode1Value = String.Empty;
-                instance.Mode1Param = String.Empty;
-                instance.Mode2Value = String.Empty;
-                instance.TitleType = TitleTypeEnum.VMLive;
-                instance.TitleParam = String.Empty;
-                instance.UserImage1 = String.Empty;
-                instance.UserImage2 = String.Empty;
-                instance.TitlePrefix = String.Empty;
-                instance.EnabledText = String.Empty;
-                instance.DisabledText = String.Empty;
+                PluginSettings instance = new PluginSettings
+                {
+                    Mode1Value = String.Empty,
+                    Mode1Param = String.Empty,
+                    Mode2Value = String.Empty,
+                    TitleType = TitleTypeEnum.VMLive,
+                    TitleParam = String.Empty,
+                    UserImage1 = String.Empty,
+                    UserImage2 = String.Empty,
+                    TitlePrefix = String.Empty,
+                    EnabledText = String.Empty,
+                    DisabledText = String.Empty
+                };
 
                 return instance;
             }
@@ -66,7 +68,7 @@ namespace VoiceMeeter
 
         #region Private members
 
-        private PluginSettings settings;
+        private readonly PluginSettings settings;
 
         #endregion
 

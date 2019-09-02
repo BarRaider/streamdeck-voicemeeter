@@ -19,9 +19,8 @@ namespace VoiceMeeter
         #region Private members
         private static VMManager instance = null;
         private static readonly object objLock = new object();
-
-        VmClient client;
-        private Timer tmrCheckDirty;
+        readonly VmClient client;
+        private readonly Timer tmrCheckDirty;
 
         #endregion
 

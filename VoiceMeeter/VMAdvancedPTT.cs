@@ -16,14 +16,16 @@ namespace VoiceMeeter
         {
             public static PluginSettings CreateDefaultSettings()
             {
-                PluginSettings instance = new PluginSettings();
-                instance.KeyPressValue = String.Empty;
-                instance.KeyReleaseValue = String.Empty;
-                instance.TitleType = TitleTypeEnum.VMLive;
-                instance.TitleParam = String.Empty;
-                instance.TitlePrefix = String.Empty;
-                instance.EnabledText = String.Empty;
-                instance.DisabledText = String.Empty;
+                PluginSettings instance = new PluginSettings
+                {
+                    KeyPressValue = String.Empty,
+                    KeyReleaseValue = String.Empty,
+                    TitleType = TitleTypeEnum.VMLive,
+                    TitleParam = String.Empty,
+                    TitlePrefix = String.Empty,
+                    EnabledText = String.Empty,
+                    DisabledText = String.Empty
+                };
 
                 return instance;
             }
@@ -52,7 +54,7 @@ namespace VoiceMeeter
 
         #region Private members
 
-        private PluginSettings settings;
+        private readonly PluginSettings settings;
 
         #endregion
 
