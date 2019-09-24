@@ -137,7 +137,7 @@ function openWebsite() {
         const json = {
             'event': 'openUrl',
             'payload': {
-                'url': 'https://BarRaider.github.io'
+                'url': 'https://BarRaider.com'
             }
         };
         websocket.send(JSON.stringify(json));

@@ -80,7 +80,7 @@
   "Description": "VoiceMeeter integration and live feedback. Four different plugins all supporting a variety of customized features. Control VoiceMeeter and get live feedback all on your Stream Deck.",
   "Name": "VoiceMeeter Integration",
   "Icon": "Images/pluginIcon",
-  "URL": "https://barraider.github.io/",
+  "URL": "https://BarRaider.com/",
   "Version": "1.7",
   "CodePath": "com.barraider.voicemeeter.exe",
   "Category": "VoiceMeeter [BarRaider]",
