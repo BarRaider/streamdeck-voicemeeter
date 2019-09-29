@@ -45,8 +45,8 @@
     <Reference Include="streamdeck-client-csharp, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\DotNet\StreamDeck\packages\streamdeck-client-csharp.4.1.1\lib\netstandard2.0\streamdeck-client-csharp.dll</HintPath>
     </Reference>
-    <Reference Include="StreamDeckTools, Version=2.5.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\DotNet\StreamDeck\packages\StreamDeck-Tools.2.5.0\lib\net472\StreamDeckTools.dll</HintPath>
+    <Reference Include="StreamDeckTools, Version=2.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\StreamDeck-Tools.2.6.0\lib\net472\StreamDeckTools.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
