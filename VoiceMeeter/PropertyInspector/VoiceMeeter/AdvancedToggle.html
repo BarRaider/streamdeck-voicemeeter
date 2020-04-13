@@ -7,6 +7,10 @@
     <meta name=apple-mobile-web-app-status-bar-style content=black>
     <title>BarRaider's VoiceMeeter Plugin</title>
     <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+    <script src="../sdtools.common.js"></script>
 </head>
 <body>
     <div class="sdpi-wrapper">
@@ -19,6 +23,7 @@
                     Example: Lets use Mode1 to turn Mono on (and do aditional things): "Strip[0].mono=1;Bus[2].Gain=-20;"<br />
                     Now "Mode1 Check" should be: "Strip[0].mono"<br />
                     Mode2 should turn mono Off: "Strip[0].mono=0;Bus[2].Gain=-10;..."<br /><br />
+                    * NEW: Mode1 Check now supports AND/OR:<br/> 'Strip[0].mono AND Strip[1].B1'<br />
                     Additional examples in the project page.
                 </p>
             </details>
@@ -26,6 +31,24 @@
         <div class="sdpi-item">
             <div class="sdpi-item-label">Mode1 Key Press</div>
             <input class="sdpi-item-value sdProperty" placeholder="Configuration to set when toggled to Mode1" value="" id="mode1Value" oninput="setSettings()">
+        </div>
+        <div type="textarea" class="sdpi-item" id="dv">
+            <div class="sdpi-item-label">Mode1 Send Hotkey</div>
+            <span class="sdpi-item-value textarea singleLineTextArea">
+                <textarea type="textarea" onblur="setSettings()" class="sdProperty singleLineTextArea" rows="1" id="mode1Hotkey" placeholder="{{ctrl}{a}}"></textarea>
+            </span>
+        </div>
+        <script>
+            $('#mode1Hotkey').highlightWithinTextarea({
+                highlight: /\{(\{[^\{\}]+\})+\}/gi
+            });
+            $("#mode1Hotkey").focus(function () {
+                $("#mode1Hotkey").trigger("input.hwt");
+            });
+        </script>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Mode1 Midi</div>
+            <input class="sdpi-item-value sdProperty" placeholder="SendMidi(nano, ctrl-change, 1, 42, 127);" value="" id="mode1Midi" oninput="setSettings()">
         </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Mode1 Check</div>
@@ -43,7 +66,24 @@
             <div class="sdpi-item-label">Mode2 Key Press</div>
             <input class="sdpi-item-value sdProperty" placeholder="Configuration to set when toggled to Mode2" value="" id="mode2Value" oninput="setSettings()">
         </div>
-
+        <div type="textarea" class="sdpi-item" id="dv">
+            <div class="sdpi-item-label">Mode2 Send Hotkey</div>
+            <span class="sdpi-item-value textarea singleLineTextArea">
+                <textarea type="textarea" onblur="setSettings()" class="sdProperty singleLineTextArea" rows="1" id="mode2Hotkey" placeholder="{{ctrl}{a}}"></textarea>
+            </span>
+        </div>
+        <script>
+            $('#mode2Hotkey').highlightWithinTextarea({
+                highlight: /\{(\{[^\{\}]+\})+\}/gi
+            });
+            $("#mode2Hotkey").focus(function () {
+                $("#mode2Hotkey").trigger("input.hwt");
+            });
+        </script>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Mode2 Midi</div>
+            <input class="sdpi-item-value sdProperty" placeholder="SendMidi(nano, ctrl-change, 1, 42, 0);" value="" id="mode2Midi" oninput="setSettings()">
+        </div>
         <div class="sdpi-item" id="userIcon2_selector">
             <div class="sdpi-item-label">Mode2 image</div>
             <div class="sdpi-item-group file" id="filepickergroup2">
@@ -79,6 +119,5 @@
             <summary>For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.com</span> </summary>
         </details>
     </div>
-    <script src="../sdtools.common.js"></script>
 </body>
 </html>

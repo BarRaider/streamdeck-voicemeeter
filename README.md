@@ -1,7 +1,14 @@
-# streamdeck-voicemeeter
+# Voicemeeter Integration
 VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
-**Author's website and contact information:** [https://barraider.github.io](https://barraider.github.io)
+**Author's website and contact information:** [https://barraider.com](https://barraider.com)
+
+## What's new in v1.8
+- `AND/OR` support on the Mode1 Check in the `Advanced Toggle`! You can now do things like `Strip[0].Mute AND Strip[1].B2` or `Strip[0].Solo OR Strip[0].B2 OR Strip[1].B1`
+- Customizable `Long Press` length on the Press/Long-Press action
+- **Hotkey Support** :star_struck: - All advanced actions now support sending hotkeys to integrate with the :voicemeeter: Macros
+- **Midi Support** :star_struck: :star_struck: - All advanced actions now support the :voicemeeter: `SendMidi` commands
+- Support for `\n` (new line) in the Enabled/Disabled Texts
 
 ## What's new in 1.7
 - VM Advanced actions now support renaming values that show 1 / 0 to a user-defined text (On/Off or Enabled/Disabled, etc.)
@@ -19,7 +26,7 @@ https://github.com/BarRaider/streamdeck-voicemeeter/releases/
 - See a live indication of the current status on Stream Deck (never forget your microphone on again!)
 - Can also be used to mute/unmute different Strips/Buses such as Spotify/Background music/etc.
 - Choose from 4 different icons to display the mute/unmute settings
-- **New in v1.0:** You can now choose your own images to display, instead of the 4 pre-defined icons
+- Choose your own images to display, instead of the 4 pre-defined icons
 
 #### VoiceMeeter Modify Setting
 - Allows you to easily modify various VoiceMeeter settings
@@ -79,26 +86,16 @@ A: Valid values can be found starting on page 9 of VoiceMeeter API PDF: https://
 Q: Can I make the title multi-line?
 A: Yes, write `\n` in the `Title Prefix` parameter to add lines
 
-## Dependencies
-This plugin uses the [StreamDeck-Tools](https://github.com/BarRaider/streamdeck-tools) v2.0
+### Download
 
-## How do I get started using it?
-Install by clicking the com.barraider.voicemeeter.streamDeckPlugin file in the Releases folder:
-https://github.com/BarRaider/streamdeck-voicemeeter/releases
+* [Download plugin](https://github.com/BarRaider/streamdeck-voicemeeter/releases/)
 
 ## I found a bug, who do I contact?
-For support please contact the developer. Contact information is available at https://barraider.github.io
+For support please contact the developer. Contact information is available at https://barraider.com
 
 ## I have a feature request, who do I contact?
-Please contact the developer. Contact information is available at https://barraider.github.io
+Please contact the developer. Contact information is available at https://barraider.com
 
-## License
-MIT License
-
-Copyright (c) 2019
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+## Dependencies
+* Uses StreamDeck-Tools by BarRaider: [![NuGet](https://img.shields.io/nuget/v/streamdeck-tools.svg?style=flat)](https://www.nuget.org/packages/streamdeck-tools)
+* Uses [Easy-PI](https://github.com/BarRaider/streamdeck-easypi) by BarRaider - Provides seamless integration with the Stream Deck PI (Property Inspector) 

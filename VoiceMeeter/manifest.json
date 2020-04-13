@@ -32,7 +32,7 @@
     },
     {
       "Icon": "Images/icon",
-      "Name": "VoiceMeeter Advanced Click/Long-Click",
+      "Name": "VoiceMeeter Advanced Press/Long-Press",
       "States": [
         {
           "Image": "Images/vmTop",
@@ -43,7 +43,7 @@
       "SupportedInMultiActions": true,
       "Tooltip": "VoiceMeeter Advanced Press/Long-Press - Directly access any setting through text. Supports both Press and Long-Press (allows you to change between two preset list of settings).",
       "UUID": "com.barraider.vmadvanced",
-      "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/Advanced.html"
+      "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/AdvancedKeypress.html"
     },
     {
       "Icon": "Images/icon",
@@ -77,11 +77,11 @@
     }
   ],
   "Author": "BarRaider",
-  "Description": "VoiceMeeter integration and live feedback. Four different plugins all supporting a variety of customized features. Control VoiceMeeter and get live feedback all on your Stream Deck.",
+  "Description": "VoiceMeeter integration and live feedback. Five different actions all supporting a variety of customized features. Control VoiceMeeter and get live feedback all on your Stream Deck.\nNEW: Hotkey support and MIDI Support",
   "Name": "VoiceMeeter Integration",
   "Icon": "Images/pluginIcon",
   "URL": "https://BarRaider.com/",
-  "Version": "1.7",
+  "Version": "1.8",
   "CodePath": "com.barraider.voicemeeter.exe",
   "Category": "VoiceMeeter [BarRaider]",
   "CategoryIcon": "Images/categoryIcon",
@@ -93,6 +93,6 @@
   ],
   "SDKVersion": 2,
   "Software": {
-    "MinimumVersion": "4.3"
+    "MinimumVersion": "4.5.1"
   }
 }

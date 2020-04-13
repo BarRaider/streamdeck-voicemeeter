@@ -7,6 +7,10 @@
     <meta name=apple-mobile-web-app-status-bar-style content=black>
     <title>BarRaider's VoiceMeeter Plugin</title>
     <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+    <script src="../sdtools.common.js"></script>
 </head>
 <body>
     <div class="sdpi-wrapper">
@@ -20,12 +24,48 @@
             </p>
         </details>
         <div class="sdpi-item">
-            <div class="sdpi-item-label">Key Press</div>
+            <div class="sdpi-item-label">Keypress</div>
             <input class="sdpi-item-value sdProperty" placeholder="Configuration to set on keypress" value="" id="keyPressValue" oninput="setSettings()">
+        </div>
+        <div type="textarea" class="sdpi-item" id="dv">
+            <div class="sdpi-item-label">Keypress Send Hotkey</div>
+            <span class="sdpi-item-value textarea singleLineTextArea">
+                <textarea type="textarea" onblur="setSettings()" class="sdProperty singleLineTextArea" rows="1" id="keypressHotkey" placeholder="{{ctrl}{a}}"></textarea>
+            </span>
+        </div>
+        <script>
+            $('#keypressHotkey').highlightWithinTextarea({
+                highlight: /\{(\{[^\{\}]+\})+\}/gi
+            });
+            $("#keypressHotkey").focus(function () {
+                $("#keypressHotkey").trigger("input.hwt");
+            });
+        </script>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Keypress Midi</div>
+            <input class="sdpi-item-value sdProperty" placeholder="SendMidi(nano, ctrl-change, 1, 42, 0);" value="" id="keypressMidi" oninput="setSettings()">
         </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Key Release</div>
             <input class="sdpi-item-value sdProperty" placeholder="Configuration to set when key is released" value="" id="keyReleaseValue" oninput="setSettings()">
+        </div>
+        <div type="textarea" class="sdpi-item" id="dv">
+            <div class="sdpi-item-label">Release Send Hotkey</div>
+            <span class="sdpi-item-value textarea singleLineTextArea">
+                <textarea type="textarea" onblur="setSettings()" class="sdProperty singleLineTextArea" rows="1" id="releaseHotkey" placeholder="{{ctrl}{a}}"></textarea>
+            </span>
+        </div>
+        <script>
+            $('#releaseHotkey').highlightWithinTextarea({
+                highlight: /\{(\{[^\{\}]+\})+\}/gi
+            });
+            $("#releaseHotkey").focus(function () {
+                $("#releaseHotkey").trigger("input.hwt");
+            });
+        </script>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Release Midi</div>
+            <input class="sdpi-item-value sdProperty" placeholder="SendMidi(nano, ctrl-change, 1, 42, 0);" value="" id="releaseMidi" oninput="setSettings()">
         </div>
         <div class="sdpi-item" id="select_single">
             <div class="sdpi-item-label">Title</div>
@@ -51,6 +91,5 @@
             <input class="sdpi-item-value sdProperty" placeholder="Parameter to fetch and show on title" value="" id="titleParam" oninput="setSettings()">
         </div>
     </div>
-    <script src="../sdtools.common.js"></script>
 </body>
 </html>

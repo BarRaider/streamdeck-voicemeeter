@@ -9,26 +9,55 @@ using System.Threading.Tasks;
 
 namespace VoiceMeeter
 {
-    [PluginActionId("com.barraider.vmadvanced")]
-    class VMAdvancedPress : PluginBase
+    [PluginActionId("com.barraider.vmmodify")]
+    class VMModifyAction : PluginBase
     {
+        private enum ParamTypeEnum
+        {
+            gain = 0,
+            comp = 1,
+            gate = 2,
+            solo = 3,
+            mono = 4,
+            pan_x = 5,
+            pan_y = 6,
+            color_x = 7,
+            color_y = 8,
+            fx_x = 9,
+            fx_y = 10,
+            eqgain1 = 11,
+            eqgain2 = 12,
+            eqgain3 = 13,
+            mc      = 14,
+            audibility = 15
+        }
+
         private class PluginSettings
         {
             public static PluginSettings CreateDefaultSettings()
             {
                 PluginSettings instance = new PluginSettings
                 {
+                    ParamType = ParamTypeEnum.gain,
+                    Strip = "Strip",
+                    StripNum = 0,
                     SetValue = String.Empty,
                     LongPressValue = String.Empty,
                     TitleType = TitleTypeEnum.VMLive,
-                    TitleParam = String.Empty,
-                    TitlePrefix = String.Empty,
-                    EnabledText = String.Empty,
-                    DisabledText = String.Empty
+                    TitlePrefix = String.Empty
                 };
 
                 return instance;
             }
+
+            [JsonProperty(PropertyName = "paramType")]
+            public ParamTypeEnum ParamType { get; set; }
+
+            [JsonProperty(PropertyName = "strip")]
+            public string Strip { get; set; }
+
+            [JsonProperty(PropertyName = "stripNum")]
+            public int StripNum { get; set; }
 
             [JsonProperty(PropertyName = "setValue")]
             public string SetValue { get; set; }
@@ -39,17 +68,8 @@ namespace VoiceMeeter
             [JsonProperty(PropertyName = "titleType")]
             public TitleTypeEnum TitleType { get; set; }
 
-            [JsonProperty(PropertyName = "titleParam")]
-            public string TitleParam { get; set; }
-
             [JsonProperty(PropertyName = "titlePrefix")]
             public string TitlePrefix { get; set; }
-
-            [JsonProperty(PropertyName = "enabledText")]
-            public string EnabledText { get; set; }
-
-            [JsonProperty(PropertyName = "disabledText")]
-            public string DisabledText { get; set; }
         }
 
         #region Private members
@@ -65,7 +85,7 @@ namespace VoiceMeeter
 
         #region Public Methods
 
-        public VMAdvancedPress(SDConnection connection, InitialPayload payload) : base(connection, payload)
+        public VMModifyAction(SDConnection connection, InitialPayload payload) : base(connection, payload)
         {
             if (payload.Settings == null || payload.Settings.Count == 0)
             {
@@ -81,9 +101,9 @@ namespace VoiceMeeter
         public void LongKeyPressed()
         {
             longKeyPressed = true;
-            if (!String.IsNullOrEmpty(settings.LongPressValue))
+            if (!String.IsNullOrEmpty(settings.LongPressValue) && float.TryParse(settings.LongPressValue, out float value))
             {
-                VMManager.Instance.SetParameters(settings.LongPressValue);
+                VMManager.Instance.SetParam(BuildDeviceName(), value);
             }
         }
 
@@ -91,34 +111,30 @@ namespace VoiceMeeter
 
         #region PluginBase
 
-        public override void ReceivedSettings(ReceivedSettingsPayload payload)
-        {
-            // New in StreamDeck-Tools v2.0:
-            Tools.AutoPopulateSettings(settings, payload.Settings);
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
-        }
-
         public async override void KeyPressed(KeyPayload payload)
         {
-            // Used for long press
-            keyPressed = true;
-            longKeyPressed = false;
-            keyPressStart = DateTime.Now;
-
             if (!VMManager.Instance.IsConnected)
             {
                 await Connection.ShowAlert();
                 return;
             }
+
+            // Used for long press
+            keyPressed = true;
+            longKeyPressed = false;
+            keyPressStart = DateTime.Now;
         }
 
         public override void KeyReleased(KeyPayload payload)
         {
             keyPressed = false;
 
-            if (!longKeyPressed && !String.IsNullOrEmpty(settings.SetValue))
+            if (!longKeyPressed)
             {
-                VMManager.Instance.SetParameters(settings.SetValue);
+                if (!String.IsNullOrEmpty(settings.SetValue) && float.TryParse(settings.SetValue, out float value))
+                {
+                    VMManager.Instance.SetParam(BuildDeviceName(), value);
+                }
             }
         }
 
@@ -129,15 +145,15 @@ namespace VoiceMeeter
                 await Connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning);
                 return;
             }
-
+                    
             // Stream Deck calls this function every second, 
             // so this is the best place to determine if we need to call the long keypress
-            if (!String.IsNullOrEmpty(settings.LongPressValue) && keyPressed && (DateTime.Now - keyPressStart).TotalSeconds >= LONG_KEYPRESS_LENGTH)
+            if (!String.IsNullOrEmpty(settings.LongPressValue) && keyPressed && (DateTime.Now - keyPressStart).TotalSeconds > LONG_KEYPRESS_LENGTH)
             {
                 LongKeyPressed();
             }
 
-            if (settings.TitleType == TitleTypeEnum.VMLive && !String.IsNullOrEmpty(settings.TitleParam))
+            if (settings.TitleType == TitleTypeEnum.VMLive)
             {
                 string prefix = String.Empty;
                 if (!String.IsNullOrEmpty(settings.TitlePrefix))
@@ -145,17 +161,7 @@ namespace VoiceMeeter
                     prefix = settings.TitlePrefix.Replace(@"\n", "\n");
                 }
 
-                string value = VMManager.Instance.GetParam(settings.TitleParam);
-                if (!String.IsNullOrEmpty(settings.EnabledText) && !String.IsNullOrEmpty(value) && value == Constants.ENABLED_VALUE)
-                {
-                    value = settings.EnabledText;
-                }
-                else if (!String.IsNullOrEmpty(settings.DisabledText) && !String.IsNullOrEmpty(value) && value == Constants.DISABLED_VALUE)
-                {
-                    value = settings.DisabledText;
-                }
-
-                await Connection.SetTitleAsync($"{prefix}{value}");
+                await Connection.SetTitleAsync($"{prefix}{VMManager.Instance.GetParam(BuildDeviceName())}");
             }
         }
 
@@ -164,7 +170,23 @@ namespace VoiceMeeter
             Logger.Instance.LogMessage(TracingLevel.INFO, "Destructor called");
         }
 
+        public override void ReceivedSettings(ReceivedSettingsPayload payload) 
+        {
+            // New in StreamDeck-Tools v2.0:
+            Tools.AutoPopulateSettings(settings, payload.Settings);
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
+        }
+
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
+
+        #endregion
+
+        #region Private Methods
+
+        private string BuildDeviceName()
+        {
+            return $"{settings.Strip}[{settings.StripNum}].{settings.ParamType.ToString()}";
+        }
 
         #endregion
     }

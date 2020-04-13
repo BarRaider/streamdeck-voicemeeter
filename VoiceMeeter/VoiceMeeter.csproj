@@ -12,6 +12,8 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -42,7 +44,13 @@
       <HintPath>..\..\..\DotNet\StreamDeck\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
-      <HintPath>..\..\..\DotNet\StreamDeck\packages\NLog.4.6.8\lib\net45\NLog.dll</HintPath>
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\NLog.4.7.0\lib\net45\NLog.dll</HintPath>
+    </Reference>
+    <Reference Include="RtMidi.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\RtMidi.Core.1.0.50\lib\netstandard2.0\RtMidi.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Serilog, Version=2.0.0.0, Culture=neutral, PublicKeyToken=24c2f752a8e58a10, processorArchitecture=MSIL">
+      <HintPath>..\..\..\DotNet\StreamDeck\packages\Serilog.2.9.0\lib\net46\Serilog.dll</HintPath>
     </Reference>
     <Reference Include="streamdeck-client-csharp, Version=4.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\DotNet\StreamDeck\packages\streamdeck-client-csharp.4.1.1\lib\netstandard2.0\streamdeck-client-csharp.dll</HintPath>
@@ -68,10 +76,13 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
     <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
-      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\InputSimulatorPlus\WindowsInput\bin\Release\WindowsInput.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HotkeyCommands\HotkeyHandler.cs" />
+    <Compile Include="Midi\MidiCommandHandler.cs" />
     <Compile Include="Properties\Plugin1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
@@ -79,14 +90,15 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="VMAdvancedPress.cs" />
-    <Compile Include="VMAdvancedPTT.cs" />
-    <Compile Include="VMAdvancedToggle.cs" />
+    <Compile Include="Actions\VMAdvancedPressAction.cs" />
+    <Compile Include="Actions\VMAdvancedPTTAction.cs" />
+    <Compile Include="Actions\VMAdvancedToggle.cs" />
     <Compile Include="VMManager.cs" />
-    <Compile Include="VMMicrophone.cs" />
-    <Compile Include="VMModify.cs" />
+    <Compile Include="Actions\VMMicrophoneAction.cs" />
+    <Compile Include="Actions\VMModifyAction.cs" />
     <Compile Include="VoiceMeeterWrapper\Constants.cs" />
     <Compile Include="VoiceMeeterWrapper\VbLoginResponse.cs" />
+    <Compile Include="HotkeyCommands\VirtualKeyCodeContainer.cs" />
     <Compile Include="VoiceMeeterWrapper\VmClient.cs" />
     <Compile Include="VoiceMeeterWrapper\VoiceMeeterRemote.cs" />
   </ItemGroup>
@@ -126,7 +138,22 @@
     <Content Include="Images\vm.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="Images\vmTop%402x.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Images\vmTop.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PropertyInspector\AdvancedKeypress.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PropertyInspector\jquery-3.3.1.min.js">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PropertyInspector\jquery.highlight-within-textarea.css">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="PropertyInspector\jquery.highlight-within-textarea.js">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\sdtools.common.js">
@@ -135,7 +162,7 @@
     <Content Include="PropertyInspector\VoiceMeeter\AdvancedPTT.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="PropertyInspector\VoiceMeeter\Advanced.html">
+    <Content Include="PropertyInspector\VoiceMeeter\AdvancedKeypress.html">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="PropertyInspector\VoiceMeeter\AdvancedToggle.html">
@@ -152,4 +179,11 @@
     </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\..\..\DotNet\StreamDeck\packages\RtMidi.Core.1.0.50\build\RtMidi.Core.targets" Condition="Exists('..\..\..\DotNet\StreamDeck\packages\RtMidi.Core.1.0.50\build\RtMidi.Core.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\..\..\DotNet\StreamDeck\packages\RtMidi.Core.1.0.50\build\RtMidi.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\DotNet\StreamDeck\packages\RtMidi.Core.1.0.50\build\RtMidi.Core.targets'))" />
+  </Target>
 </Project>

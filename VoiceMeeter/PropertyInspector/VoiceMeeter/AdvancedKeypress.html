@@ -7,6 +7,11 @@
     <meta name=apple-mobile-web-app-status-bar-style content=black>
     <title>BarRaider's VoiceMeeter Plugin</title>
     <link rel="stylesheet" href="../sdpi.css">
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+    <script src="../sdtools.common.js"></script>
+    <script src="../AdvancedKeypress.js"></script>
 </head>
 <body>
     <div class="sdpi-wrapper">
@@ -21,12 +26,59 @@
             </p>
         </details>
         <div class="sdpi-item">
-            <div class="sdpi-item-label">Key Press</div>
+            <div class="sdpi-item-label">Keypress</div>
             <input class="sdpi-item-value sdProperty" placeholder="Configuration to set on keypress" value="" id="setValue" oninput="setSettings()">
         </div>
+        <div type="textarea" class="sdpi-item" id="dv">
+            <div class="sdpi-item-label">Keypress Send Hotkey</div>
+            <span class="sdpi-item-value textarea singleLineTextArea">
+                <textarea type="textarea" onblur="setSettings()" class="sdProperty singleLineTextArea" rows="1" id="keypressHotkey" placeholder="{{ctrl}{a}}"></textarea>
+            </span>
+        </div>
+        <script>
+            $('#keypressHotkey').highlightWithinTextarea({
+                highlight: /\{(\{[^\{\}]+\})+\}/gi
+            });
+            $("#keypressHotkey").focus(function () {
+                $("#keypressHotkey").trigger("input.hwt");
+            });
+        </script>
         <div class="sdpi-item">
-            <div class="sdpi-item-label">Long-Press</div>
+            <div class="sdpi-item-label">Keypress Midi</div>
+            <input class="sdpi-item-value sdProperty" placeholder="SendMidi(nano, ctrl-change, 1, 42, 0);" value="" id="keypressMidi" oninput="setSettings()">
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Long Keypress</div>
             <input class="sdpi-item-value sdProperty" placeholder="Configuration to set on long keypress" value="" id="longPressValue" oninput="setSettings()">
+        </div>
+        <div type="range" class="sdpi-item" id="dvLongKeypressTime">
+            <div class="sdpi-item-label" id="longKeypressTimeTitle">Long Keypress Time</div>
+            <div class="sdpi-item-value">
+                <span class="clickable" value="150">150</span>
+                <input type="range" min="150" max="1000" value=150 list="numbers" class="sdProperty" id="longKeypressTime" oninput="setSettings()">
+                <span class="clickable" value="1000">1000</span>
+                <datalist id="numbers">
+                    <option>1000</option>
+                </datalist>
+            </div>
+        </div>
+        <div type="textarea" class="sdpi-item" id="dv">
+            <div class="sdpi-item-label">Long Send Hotkey</div>
+            <span class="sdpi-item-value textarea singleLineTextArea">
+                <textarea type="textarea" onblur="setSettings()" class="sdProperty singleLineTextArea" rows="1" id="longHotkey" placeholder="{{ctrl}{a}}"></textarea>
+            </span>
+        </div>
+        <script>
+            $('#longHotkey').highlightWithinTextarea({
+                highlight: /\{(\{[^\{\}]+\})+\}/gi
+            });
+            $("#longHotkey").focus(function () {
+                $("#longHotkey").trigger("input.hwt");
+            });
+        </script>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Longpress Midi</div>
+            <input class="sdpi-item-value sdProperty" placeholder="SendMidi(nano, ctrl-change, 1, 42, 0);" value="" id="longMidi" oninput="setSettings()">
         </div>
         <div class="sdpi-item" id="select_single">
             <div class="sdpi-item-label">Title</div>

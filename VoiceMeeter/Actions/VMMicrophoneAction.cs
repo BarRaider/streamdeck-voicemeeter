@@ -6,7 +6,7 @@ using System;
 namespace VoiceMeeter
 {
     [PluginActionId("com.barraider.vmmicrophone")]
-    class VMMicrophone : PluginBase
+    class VMMicrophoneAction : PluginBase
     {
         private enum MicTypeEnum
         {
@@ -74,7 +74,7 @@ namespace VoiceMeeter
 
         #region Public Methods
 
-        public VMMicrophone(SDConnection connection, InitialPayload payload) : base(connection, payload)
+        public VMMicrophoneAction(SDConnection connection, InitialPayload payload) : base(connection, payload)
         {
             if (payload.Settings == null || payload.Settings.Count == 0)
             {

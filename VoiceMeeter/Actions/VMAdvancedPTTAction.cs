@@ -1,4 +1,5 @@
 ﻿using BarRaider.SdTools;
+using HotkeyCommands;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -6,11 +7,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VoiceMeeter.Midi;
 
 namespace VoiceMeeter
 {
     [PluginActionId("com.barraider.vmadvancedptt")]
-    public class VMAdvancedPTT : PluginBase
+    public class VMAdvancedPTTAction : PluginBase
     {
         private class PluginSettings
         {
@@ -50,6 +52,18 @@ namespace VoiceMeeter
 
             [JsonProperty(PropertyName = "disabledText")]
             public string DisabledText { get; set; }
+
+            [JsonProperty(PropertyName = "keypressHotkey")]
+            public string KeypressHotkey { get; set; }
+
+            [JsonProperty(PropertyName = "keypressMidi")]
+            public string KeypressMidi { get; set; }
+
+            [JsonProperty(PropertyName = "releaseHotkey")]
+            public string ReleaseHotkey { get; set; }
+
+            [JsonProperty(PropertyName = "releaseMidi")]
+            public string ReleaseMidi { get; set; }
         }
 
         #region Private members
@@ -60,7 +74,7 @@ namespace VoiceMeeter
 
         #region Public Methods
 
-        public VMAdvancedPTT(SDConnection connection, InitialPayload payload) : base(connection, payload)
+        public VMAdvancedPTTAction(SDConnection connection, InitialPayload payload) : base(connection, payload)
         {
             if (payload.Settings == null || payload.Settings.Count == 0)
             {
@@ -71,6 +85,7 @@ namespace VoiceMeeter
             {
                 this.settings = payload.Settings.ToObject<PluginSettings>();
             }
+            InitializeSettings();
         }
 
         public async override void KeyPressed(KeyPayload payload)
@@ -85,6 +100,12 @@ namespace VoiceMeeter
             {
                 VMManager.Instance.SetParameters(settings.KeyPressValue);
             }
+            MidiCommandHandler.HandleMidiParameters(settings.KeypressMidi);
+
+            if (!String.IsNullOrEmpty(settings.KeypressHotkey))
+            {
+                HotkeyHandler.RunHotkey(settings.KeypressHotkey);
+            }
         }
 
         public override void KeyReleased(KeyPayload payload)
@@ -92,6 +113,12 @@ namespace VoiceMeeter
             if (!String.IsNullOrEmpty(settings.KeyReleaseValue))
             {
                 VMManager.Instance.SetParameters(settings.KeyReleaseValue);
+            }
+            MidiCommandHandler.HandleMidiParameters(settings.ReleaseMidi);
+
+            if (!String.IsNullOrEmpty(settings.ReleaseHotkey))
+            {
+                HotkeyHandler.RunHotkey(settings.ReleaseHotkey);
             }
         }
 
@@ -127,8 +154,8 @@ namespace VoiceMeeter
 
         public override void ReceivedSettings(ReceivedSettingsPayload payload)
         {
-            // New in StreamDeck-Tools v2.0:
             Tools.AutoPopulateSettings(settings, payload.Settings);
+            InitializeSettings();
             Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
         }
 
@@ -137,6 +164,30 @@ namespace VoiceMeeter
         public override void Dispose()
         {
             Logger.Instance.LogMessage(TracingLevel.INFO, "Destructor called");
+        }
+
+        #endregion
+
+        #region Private Methods
+
+        private void InitializeSettings()
+        {
+            string keypressHotkey = HotkeyHandler.ParseKeystroke(settings.KeypressHotkey);
+            string releaseHotkey = HotkeyHandler.ParseKeystroke(settings.ReleaseHotkey);
+
+            // If the parsed hotkey is different than what the user inputed, overwrite the user input
+            // because it's invalid
+            if (keypressHotkey != settings.KeypressHotkey || releaseHotkey != settings.ReleaseHotkey)
+            {
+                settings.KeypressHotkey = keypressHotkey;
+                settings.ReleaseHotkey = releaseHotkey;
+                SaveSettings();
+            }
+        }
+
+        private Task SaveSettings()
+        {
+            return Connection.SetSettingsAsync(JObject.FromObject(settings));
         }
 
         #endregion
