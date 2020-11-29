@@ -69,6 +69,7 @@ namespace VoiceMeeter
         #region Private members
 
         private readonly PluginSettings settings;
+        private bool didSetNotConnected = false;
 
         #endregion
 
@@ -90,8 +91,10 @@ namespace VoiceMeeter
 
         public async override void KeyPressed(KeyPayload payload)
         {
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} KeyPressed");
             if (!VMManager.Instance.IsConnected)
             {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"Key pressed but VM is not connected!");
                 await Connection.ShowAlert();
                 return;
             }
@@ -126,8 +129,14 @@ namespace VoiceMeeter
         {
             if (!VMManager.Instance.IsConnected)
             {
+                didSetNotConnected = true;
                 await Connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning);
                 return;
+            }
+            else if (didSetNotConnected)
+            {
+                didSetNotConnected = false;
+                await Connection.SetImageAsync((String)null);
             }
 
             if (settings.TitleType == TitleTypeEnum.VMLive && !String.IsNullOrEmpty(settings.TitleParam))
@@ -156,7 +165,6 @@ namespace VoiceMeeter
         {
             Tools.AutoPopulateSettings(settings, payload.Settings);
             InitializeSettings();
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
         }
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }

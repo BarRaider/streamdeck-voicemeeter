@@ -1,0 +1,61 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>BarRaider's VoiceMeeter Plugin</title>
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/barraider/streamdeck-easypi@latest/src/sdpi.css">
+    <script src="https://cdn.jsdelivr.net/gh/barraider/streamdeck-easypi@latest/src/sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
+</head>
+<body>
+    <div class="sdpi-wrapper">
+        <details class="message info">
+            <summary>For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.com</span> </summary>
+        </details>
+        <div class="sdpi-item" id="dvButtonId">
+            <div class="sdpi-item-label">Logical Id</div>
+            <input class="sdpi-item-value sdProperty max20" id="buttonId" value="0" inputmode\ pattern="[0-9]*" type="number" oninput="setSettings()">
+        </div>
+        <div class="sdpi-item" id="dvToggleMode">
+            <div class="sdpi-item-label">Mode</div>
+            <select class="sdpi-item-value select sdProperty" id="toggleMode" oninput="setSettings()">
+                <option value="0">Toggle Mode</option>
+                <option value="1">Push Mode</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="dvEnabledImage">
+            <div class="sdpi-item-label">Enabled Image</div>
+            <div class="sdpi-item-group file" id="filepickergroup">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="enabledImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="enabledImage" id="enabledImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="enabledImage">Choose file...</label>
+            </div>
+        </div>
+        <div class="sdpi-item" id="dvDisabledImage">
+            <div class="sdpi-item-label">Disabled Image</div>
+            <div class="sdpi-item-group file" id="filepickergroup2">
+                <input class="sdpi-item-value sdProperty sdFile" type="file" id="disabledImage" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
+                <label class="sdpi-file-info " for="disabledImage" id="disabledImageFilename">No file...</label>
+                <label class="sdpi-file-label" for="disabledImage">Choose file...</label>
+            </div>
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Title Prefix</div>
+            <input class="sdpi-item-value sdProperty" placeholder="Text to add before the value" value="" id="titlePrefix" oninput="setSettings()">
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">"Enabled" text</div>
+            <input class="sdpi-item-value sdProperty" placeholder="Text when 'Value' is 1" value="" id="enabledText" oninput="setSettings()">
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">"Disabled" text</div>
+            <input class="sdpi-item-value sdProperty" placeholder="Text when 'Value' is 0" value="" id="disabledText" oninput="setSettings()">
+        </div>
+    </div>
+</body>
+</html>

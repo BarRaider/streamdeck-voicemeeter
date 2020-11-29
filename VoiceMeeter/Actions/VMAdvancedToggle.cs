@@ -102,6 +102,7 @@ namespace VoiceMeeter
         private const string LOGICAL_OR = " OR ";
 
         private readonly PluginSettings settings;
+        private bool didSetNotConnected = false;
 
         #endregion
 
@@ -127,8 +128,10 @@ namespace VoiceMeeter
 
         public async override void KeyPressed(KeyPayload payload)
         {
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} KeyPressed");
             if (!VMManager.Instance.IsConnected)
             {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"Key pressed but VM is not connected!");
                 await Connection.ShowAlert();
                 return;
             }
@@ -168,8 +171,14 @@ namespace VoiceMeeter
         {
             if (!VMManager.Instance.IsConnected)
             {
+                didSetNotConnected = true;
                 await Connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning);
                 return;
+            }
+            else if (didSetNotConnected)
+            {
+                didSetNotConnected = false;
+                await Connection.SetImageAsync((String)null);
             }
 
             // Set the image
@@ -213,8 +222,6 @@ namespace VoiceMeeter
         public async override void ReceivedSettings(ReceivedSettingsPayload payload)
         {
             Tools.AutoPopulateSettings(settings, payload.Settings);
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
-
             InitializeSettings();
             // Used to return the correct filename back to the Property Inspector
             await SaveSettings();

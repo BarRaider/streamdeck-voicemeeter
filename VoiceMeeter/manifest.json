@@ -2,7 +2,23 @@
   "Actions": [
     {
       "Icon": "Images/icon",
-      "Name": "VoiceMeeter Mute/Unmute",
+      "Name": "Modify Setting",
+      "States": [
+        {
+          "Image": "Images/vmTop",
+          "TitleAlignment": "bottom",
+          "FontSize": "11"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "DisableCaching": true,
+      "Tooltip": "Modify Setting - Allows you to easily modify various VoiceMeeter settings.",
+      "UUID": "com.barraider.vmmodify",
+      "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/Modify.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "Mute/Unmute",
       "States": [
         {
           "Image": "Images/vm",
@@ -11,13 +27,14 @@
         }
       ],
       "SupportedInMultiActions": true,
-      "Tooltip": "VoiceMeeter Mute/Unmute - See a live indication of the current status on Stream Deck (never forget your microphone on again!).",
+      "DisableCaching": true,
+      "Tooltip": "Mute/Unmute - See a live indication of the current status on Stream Deck (never forget your microphone on again!).",
       "UUID": "com.barraider.vmmicrophone",
       "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/Microphone.html"
     },
     {
       "Icon": "Images/icon",
-      "Name": "VoiceMeeter Modify Setting",
+      "Name": "Advanced Press/Long-Press",
       "States": [
         {
           "Image": "Images/vmTop",
@@ -26,28 +43,14 @@
         }
       ],
       "SupportedInMultiActions": true,
-      "Tooltip": "VoiceMeeter Modify Setting - Allows you to easily modify various VoiceMeeter settings.",
-      "UUID": "com.barraider.vmmodify",
-      "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/Modify.html"
-    },
-    {
-      "Icon": "Images/icon",
-      "Name": "VoiceMeeter Advanced Press/Long-Press",
-      "States": [
-        {
-          "Image": "Images/vmTop",
-          "TitleAlignment": "bottom",
-          "FontSize": "11"
-        }
-      ],
-      "SupportedInMultiActions": true,
-      "Tooltip": "VoiceMeeter Advanced Press/Long-Press - Directly access any setting through text. Supports both Press and Long-Press (allows you to change between two preset list of settings).",
+      "DisableCaching": true,
+      "Tooltip": "Advanced Press/Long-Press - Directly access any setting through text. Supports both Press and Long-Press (allows you to change between two preset list of settings).",
       "UUID": "com.barraider.vmadvanced",
       "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/AdvancedKeypress.html"
     },
     {
       "Icon": "Images/icon",
-      "Name": "VoiceMeeter Advanced Toggle",
+      "Name": "Advanced Toggle",
       "States": [
         {
           "Image": "Images/vmTop",
@@ -56,13 +59,14 @@
         }
       ],
       "SupportedInMultiActions": true,
-      "Tooltip": "VoiceMeeter Advanced Toggle - Focused on toggling between two modes (versus click and long click in the VoiceMeeter Advanced Click/Long-Click).",
+      "DisableCaching": true,
+      "Tooltip": "Advanced Toggle - Focused on toggling between two modes (versus click and long click in the VoiceMeeter Advanced Click/Long-Click).",
       "UUID": "com.barraider.vmadvancedtoggle",
       "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/AdvancedToggle.html"
     },
     {
       "Icon": "Images/icon",
-      "Name": "VoiceMeeter Advanced PTT",
+      "Name": "Advanced PTT",
       "States": [
         {
           "Image": "Images/vmTop",
@@ -71,9 +75,26 @@
         }
       ],
       "SupportedInMultiActions": true,
-      "Tooltip": "VoiceMeeter Advanced PTT - Enable settings until you release the button",
+      "DisableCaching": true,
+      "Tooltip": "Advanced PTT - Enable settings until you release the button",
       "UUID": "com.barraider.vmadvancedptt",
       "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/AdvancedPTT.html"
+    },
+    {
+      "Icon": "Images/icon",
+      "Name": "MacroButton Toggle",
+      "States": [
+        {
+          "Image": "Images/buttonDisabled",
+          "TitleAlignment": "middle",
+          "FontSize": "11"
+        }
+      ],
+      "SupportedInMultiActions": true,
+      "DisableCaching": true,
+      "Tooltip": "MacroButton Toggle - Enable/Disable a VoiceMeeter MacroButton",
+      "UUID": "com.barraider.vmmacrotoggle",
+      "PropertyInspectorPath": "PropertyInspector/VoiceMeeter/MacroToggle.html"
     }
   ],
   "Author": "BarRaider",
@@ -81,7 +102,7 @@
   "Name": "VoiceMeeter Integration",
   "Icon": "Images/pluginIcon",
   "URL": "https://BarRaider.com/",
-  "Version": "1.8",
+  "Version": "1.9",
   "CodePath": "com.barraider.voicemeeter.exe",
   "Category": "VoiceMeeter [BarRaider]",
   "CategoryIcon": "Images/categoryIcon",
@@ -93,6 +114,6 @@
   ],
   "SDKVersion": 2,
   "Software": {
-    "MinimumVersion": "4.5.1"
+    "MinimumVersion": "4.9"
   }
 }

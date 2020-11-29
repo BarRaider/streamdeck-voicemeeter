@@ -48,9 +48,21 @@ namespace VoiceMeeterWrapper
             VoiceMeeterRemote.SetParameters(parameters);
         }
 
+        public void SetMacroStatus(int buttonId, float value)
+        {
+            VoiceMeeterRemote.SetMacroStatus(buttonId, value, 0);
+        }
+
+        public float GetMacroStatus(int buttonId)
+        {
+            float value = 0;
+            VoiceMeeterRemote.GetMacroStatus(buttonId, ref value, 0);
+            return value;
+        }
+
         public int Poll()
         {
-            return VoiceMeeterRemote.IsParametersDirty();
+            return VoiceMeeterRemote.IsParametersDirty() + VoiceMeeterRemote.IsMacrosDirty();
         }
 
         private bool disposed = false;

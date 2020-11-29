@@ -36,7 +36,7 @@ namespace VoiceMeeter
             IsConnected = true;
             tmrCheckDirty = new Timer();
             tmrCheckDirty.Elapsed += TmrCheckDirty_Elapsed;
-            tmrCheckDirty.Interval = 10;
+            tmrCheckDirty.Interval = 100;
             tmrCheckDirty.Start();
         }
 
@@ -88,6 +88,16 @@ namespace VoiceMeeter
         public void SetParameters(string parameters)
         {
             client.SetParameters(parameters);
+        }
+
+        public bool GetMacroStatus(int buttonId)
+        {
+            return client.GetMacroStatus(buttonId) > 0;
+        }
+
+        public void SetMacroStatus(int buttonId, bool isEnabled)
+        {
+            client.SetMacroStatus(buttonId, isEnabled ? 1f : 0f);
         }
     }
 }

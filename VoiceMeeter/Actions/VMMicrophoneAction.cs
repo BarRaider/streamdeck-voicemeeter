@@ -1,4 +1,5 @@
 ﻿using BarRaider.SdTools;
+using HotkeyCommands;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -36,7 +37,9 @@ namespace VoiceMeeter
                     SingleValue = String.Empty,
                     ImageType = ImageTypeEnum.Microphone,
                     UserImage1 = String.Empty,
-                    UserImage2 = String.Empty
+                    UserImage2 = String.Empty,
+                    MuteHotkey = String.Empty,
+                    UnmuteHotkey = String.Empty
                 };
 
                 return instance;
@@ -64,11 +67,19 @@ namespace VoiceMeeter
             [FilenameProperty]
             [JsonProperty(PropertyName = "userImage2")]
             public string UserImage2 { get; set; }
+
+            [JsonProperty(PropertyName = "muteHotkey")]
+            public string MuteHotkey { get; set; }
+
+            [JsonProperty(PropertyName = "unmuteHotkey")]
+            public string UnmuteHotkey { get; set; }
+
         }
 
         #region Private members
 
         private readonly PluginSettings settings;
+        private bool didSetNotConnected = false;
 
         #endregion
 
@@ -93,12 +104,15 @@ namespace VoiceMeeter
 
         public async override void KeyPressed(KeyPayload payload)
         {
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} KeyPressed");
             if (!VMManager.Instance.IsConnected)
             {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"Key pressed but VM is not connected!");
                 await Connection.ShowAlert();
                 return;
             }
 
+            bool triggeredMute = false;
             switch (settings.MicType)
             {
                 case MicTypeEnum.SingleMode:
@@ -106,6 +120,7 @@ namespace VoiceMeeter
                     if (Int32.TryParse(settings.SingleValue, out value))
                     {
                         VMManager.Instance.SetParam(BuildDeviceName(), value);
+                        triggeredMute = value != 0;
                     }
                     else
                     {
@@ -115,11 +130,23 @@ namespace VoiceMeeter
                 case MicTypeEnum.Toggle:
                     bool isMuted = VMManager.Instance.GetParamBool(BuildDeviceName());
                     VMManager.Instance.SetParam(BuildDeviceName(), isMuted ? 0 : 1);
+                    triggeredMute = !isMuted;
                     break;
                 case MicTypeEnum.PTT:
                     VMManager.Instance.SetParam(BuildDeviceName(), 0);
+                    triggeredMute = false;
                     break;
             }
+
+            if (triggeredMute && !String.IsNullOrEmpty(settings.MuteHotkey))
+            {
+                HotkeyHandler.RunHotkey(settings.MuteHotkey);
+            }
+            else if (!triggeredMute && !String.IsNullOrEmpty(settings.UnmuteHotkey))
+            {
+                HotkeyHandler.RunHotkey(settings.UnmuteHotkey);
+            }
+            
         }
 
         public override void KeyReleased(KeyPayload payload)
@@ -127,6 +154,11 @@ namespace VoiceMeeter
             if (settings.MicType == MicTypeEnum.PTT)
             {
                 VMManager.Instance.SetParam(BuildDeviceName(), 1);
+
+                if (!String.IsNullOrEmpty(settings.MuteHotkey))
+                {
+                    HotkeyHandler.RunHotkey(settings.MuteHotkey);
+                }
             }
         }
 
@@ -134,8 +166,14 @@ namespace VoiceMeeter
         {
             if (!VMManager.Instance.IsConnected)
             {
+                didSetNotConnected = true;
                 await Connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning);
                 return;
+            }
+            else if (didSetNotConnected)
+            {
+                didSetNotConnected = false;
+                await Connection.SetImageAsync((String)null);
             }
 
             await Connection.SetImageAsync(GetBase64ImageStatus());
@@ -150,7 +188,6 @@ namespace VoiceMeeter
         {
             // New in StreamDeck-Tools v2.0:
             Tools.AutoPopulateSettings(settings, payload.Settings);
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
 
             // Used to return the correct filename back to the Property Inspector
             await Connection.SetSettingsAsync(JObject.FromObject(settings));

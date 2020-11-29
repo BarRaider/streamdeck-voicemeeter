@@ -25,11 +25,20 @@ namespace VoiceMeeterWrapper
         [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_IsParametersDirty")]
         public static extern int IsParametersDirty();
 
+        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_MacroButton_IsDirty")]
+        public static extern int IsMacrosDirty();
+
         [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_GetVoicemeeterVersion")]
         public static extern int GetVoicemeeterVersion(ref long value);
 
         [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_SetParameters")]
         public static extern int SetParameters(string szParameters);
+
+        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_MacroButton_GetStatus")]
+        public static extern int GetMacroStatus(int buttonId, ref float value, int bitmode);
+
+        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_MacroButton_SetStatus")]
+        public static extern int SetMacroStatus(int buttonId, float value, int bitmode);
 
         [DllImport("kernel32.dll")]
         private static extern IntPtr LoadLibrary(string dllToLoad);

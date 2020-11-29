@@ -6,8 +6,11 @@
     <meta name=apple-mobile-web-app-capable content=yes>
     <meta name=apple-mobile-web-app-status-bar-style content=black>
     <title>BarRaider's VoiceMeeter Plugin</title>
-    <link rel="stylesheet" href="../sdpi.css">
-    <script src="../sdtools.common.js"></script>
+    <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/barraider/streamdeck-easypi@latest/src/sdpi.css">
+    <script src="https://cdn.jsdelivr.net/gh/barraider/streamdeck-easypi@latest/src/sdtools.common.js"></script>
+    <script src="../jquery-3.3.1.min.js"></script>
+    <script src="../jquery.highlight-within-textarea.js"></script>
 </head>
 <body>
     <div class="sdpi-wrapper">
@@ -57,21 +60,49 @@
             <input class="sdpi-item-value sdProperty" placeholder="Used for Single Setting Mode" value="" id="singleValue" oninput="setSettings()">
         </div>
         <div class="sdpi-item" id="userIcon1_selector">
-            <div class="sdpi-item-label">User defined image1</div>
+            <div class="sdpi-item-label">Muted Image</div>
             <div class="sdpi-item-group file" id="filepickergroup">
                 <input class="sdpi-item-value sdProperty sdFile" type="file" id="userImage1" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
                 <label class="sdpi-file-info " for="userImage1" id="userImage1Filename">No file...</label>
                 <label class="sdpi-file-label" for="userImage1">Choose file...</label>
             </div>
         </div>
+        <div type="textarea" class="sdpi-item" id="dvMuteHotkey">
+            <div class="sdpi-item-label">Mute Sends Hotkey</div>
+            <span class="sdpi-item-value textarea singleLineTextArea">
+                <textarea type="textarea" onblur="setSettings()" class="sdProperty singleLineTextArea" rows="1" id="muteHotkey" placeholder="{{ctrl}{a}}"></textarea>
+            </span>
+        </div>
+        <script>
+            $('#muteHotkey').highlightWithinTextarea({
+                highlight: /\{(\{[^\{\}]+\})+\}/gi
+            });
+            $("#muteHotkey").focus(function () {
+                $("#muteHotkey").trigger("input.hwt");
+            });
+        </script>
         <div class="sdpi-item" id="userIcon2_selector">
-            <div class="sdpi-item-label">User defined image2</div>
+            <div class="sdpi-item-label">Unmuted Image</div>
             <div class="sdpi-item-group file" id="filepickergroup2">
                 <input class="sdpi-item-value sdProperty sdFile" type="file" id="userImage2" accept=".jpg, .jpeg, .png, .ico, .gif, .bmp, .tiff" oninput="setSettings()">
                 <label class="sdpi-file-info " for="userImage2" id="userImage2Filename">No file...</label>
                 <label class="sdpi-file-label" for="userImage2">Choose file...</label>
             </div>
         </div>
+        <div type="textarea" class="sdpi-item" id="dvUnmuteHotkey">
+            <div class="sdpi-item-label">Unmute Sends Hotkey</div>
+            <span class="sdpi-item-value textarea singleLineTextArea">
+                <textarea type="textarea" onblur="setSettings()" class="sdProperty singleLineTextArea" rows="1" id="unmuteHotkey" placeholder="{{ctrl}{a}}"></textarea>
+            </span>
+        </div>
+        <script>
+            $('#unmuteHotkey').highlightWithinTextarea({
+                highlight: /\{(\{[^\{\}]+\})+\}/gi
+            });
+            $("#unmuteHotkey").focus(function () {
+                $("#unmuteHotkey").trigger("input.hwt");
+            });
+        </script>
     </div>
 </body>
 </html>

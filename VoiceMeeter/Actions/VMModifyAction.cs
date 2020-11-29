@@ -80,6 +80,7 @@ namespace VoiceMeeter
         private bool keyPressed = false;
         private bool longKeyPressed = false;
         private DateTime keyPressStart;
+        private bool didSetNotConnected = false;
 
         #endregion
 
@@ -113,8 +114,10 @@ namespace VoiceMeeter
 
         public async override void KeyPressed(KeyPayload payload)
         {
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} KeyPressed");
             if (!VMManager.Instance.IsConnected)
             {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"Key pressed but VM is not connected!");
                 await Connection.ShowAlert();
                 return;
             }
@@ -142,10 +145,16 @@ namespace VoiceMeeter
         {
             if (!VMManager.Instance.IsConnected)
             {
+                didSetNotConnected = true;
                 await Connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning);
                 return;
             }
-                    
+            else if (didSetNotConnected)
+            {
+                didSetNotConnected = false;
+                await Connection.SetImageAsync((String)null);
+            }
+
             // Stream Deck calls this function every second, 
             // so this is the best place to determine if we need to call the long keypress
             if (!String.IsNullOrEmpty(settings.LongPressValue) && keyPressed && (DateTime.Now - keyPressStart).TotalSeconds > LONG_KEYPRESS_LENGTH)
@@ -174,7 +183,6 @@ namespace VoiceMeeter
         {
             // New in StreamDeck-Tools v2.0:
             Tools.AutoPopulateSettings(settings, payload.Settings);
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
         }
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
@@ -185,7 +193,7 @@ namespace VoiceMeeter
 
         private string BuildDeviceName()
         {
-            return $"{settings.Strip}[{settings.StripNum}].{settings.ParamType.ToString()}";
+            return $"{settings.Strip}[{settings.StripNum}].{settings.ParamType}";
         }
 
         #endregion

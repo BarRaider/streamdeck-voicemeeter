@@ -6,15 +6,18 @@
     <meta name=apple-mobile-web-app-capable content=yes>
     <meta name=apple-mobile-web-app-status-bar-style content=black>
     <title>BarRaider's VoiceMeeter Plugin</title>
-    <link rel="stylesheet" href="../sdpi.css">
     <link rel="stylesheet" href="../jquery.highlight-within-textarea.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/barraider/streamdeck-easypi@latest/src/sdpi.css">
+    <script src="https://cdn.jsdelivr.net/gh/barraider/streamdeck-easypi@latest/src/sdtools.common.js"></script>
     <script src="../jquery-3.3.1.min.js"></script>
     <script src="../jquery.highlight-within-textarea.js"></script>
-    <script src="../sdtools.common.js"></script>
     <script src="../AdvancedKeypress.js"></script>
 </head>
 <body>
     <div class="sdpi-wrapper">
+        <details class="message info">
+            <summary>For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.com</span> </summary>
+        </details>
         <details class="message question">
             <summary>This plugins allows you to send a list of commands directly to VoiceMeeter (click this text for more info...)</summary>
             <p>
@@ -103,10 +106,6 @@
             <div class="sdpi-item-label">"Disabled" text</div>
             <input class="sdpi-item-value sdProperty" placeholder="Text when 'Title Value' is 0" value="" id="disabledText" oninput="setSettings()">
         </div>
-        <details class="message">
-            <summary>For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.com</span> </summary>
-        </details>
-
     </div>
     <script src="../sdtools.common.js"></script>
 </body>

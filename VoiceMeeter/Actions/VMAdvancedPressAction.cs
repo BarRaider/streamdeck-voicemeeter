@@ -79,11 +79,10 @@ namespace VoiceMeeter
         private const int LONG_KEYPRESS_LENGTH_MS = 600;
 
         private readonly PluginSettings settings;
-        private bool keyPressed = false;
         private bool longKeyPressed = false;
-        private DateTime keyPressStart;
         private int longKeypressTime = LONG_KEYPRESS_LENGTH_MS;
         private readonly System.Timers.Timer tmrRunLongPress = new System.Timers.Timer();
+        private bool didSetNotConnected = false;
 
         #endregion
 
@@ -113,6 +112,7 @@ namespace VoiceMeeter
         public void LongKeyPressed()
         {
             longKeyPressed = true;
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"Long keypress");
             if (!String.IsNullOrEmpty(settings.LongPressValue))
             {
                 VMManager.Instance.SetParameters(settings.LongPressValue);
@@ -133,18 +133,18 @@ namespace VoiceMeeter
         {
             Tools.AutoPopulateSettings(settings, payload.Settings);
             InitializeSettings();
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"Settings loaded: {payload.Settings}");
         }
 
         public async override void KeyPressed(KeyPayload payload)
         {
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} KeyPressed");
+
             // Used for long press
-            keyPressed = true;
             longKeyPressed = false;
-            keyPressStart = DateTime.Now;
 
             if (!VMManager.Instance.IsConnected)
             {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"Key pressed but VM is not connected!");
                 await Connection.ShowAlert();
                 return;
             }
@@ -155,11 +155,11 @@ namespace VoiceMeeter
 
         public override void KeyReleased(KeyPayload payload)
         {
-            keyPressed = false;
             tmrRunLongPress.Stop();
 
             if (!longKeyPressed && !String.IsNullOrEmpty(settings.SetValue))
             {
+                Logger.Instance.LogMessage(TracingLevel.INFO, $"Short keypress");
                 VMManager.Instance.SetParameters(settings.SetValue);
                 MidiCommandHandler.HandleMidiParameters(settings.KeypressMidi);
                 if (!String.IsNullOrEmpty(settings.KeypressHotkey))
@@ -173,8 +173,14 @@ namespace VoiceMeeter
         {
             if (!VMManager.Instance.IsConnected)
             {
+                didSetNotConnected = true;
                 await Connection.SetImageAsync(Properties.Plugin.Default.VMNotRunning);
                 return;
+            }
+            else if (didSetNotConnected)
+            {
+                didSetNotConnected = false;
+                await Connection.SetImageAsync((String)null);
             }
 
             if (settings.TitleType == TitleTypeEnum.VMLive && !String.IsNullOrEmpty(settings.TitleParam))
@@ -202,6 +208,8 @@ namespace VoiceMeeter
         public override void Dispose()
         {
             Logger.Instance.LogMessage(TracingLevel.INFO, "Destructor called");
+            tmrRunLongPress.Stop();
+            tmrRunLongPress.Elapsed -= TmrRunLongPress_Elapsed;
         }
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
