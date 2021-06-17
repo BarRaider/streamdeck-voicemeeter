@@ -102,7 +102,7 @@
   "Name": "VoiceMeeter Integration",
   "Icon": "Images/pluginIcon",
   "URL": "https://BarRaider.com/",
-  "Version": "1.9",
+  "Version": "2.0",
   "CodePath": "com.barraider.voicemeeter.exe",
   "Category": "VoiceMeeter [BarRaider]",
   "CategoryIcon": "Images/categoryIcon",
@@ -114,6 +114,6 @@
   ],
   "SDKVersion": 2,
   "Software": {
-    "MinimumVersion": "4.9"
+    "MinimumVersion": "5.0"
   }
 }
