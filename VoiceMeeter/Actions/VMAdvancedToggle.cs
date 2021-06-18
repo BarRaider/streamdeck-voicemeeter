@@ -100,6 +100,7 @@ namespace VoiceMeeter
         #region Private members
         private const string LOGICAL_AND = " AND ";
         private const string LOGICAL_OR = " OR ";
+        private const string LOGICAL_CUST = "ADV ";
 
         private readonly PluginSettings settings;
         private bool didSetNotConnected = false;
@@ -136,7 +137,7 @@ namespace VoiceMeeter
                 return;
             }
 
-            bool isMode1 = IsMode1(true);
+            bool isMode1 = IsMode1(true, this.GetType().ToString());
             if (isMode1) // Currently in Mode1, so run Mode2 commands
             {
                 if (!String.IsNullOrEmpty(settings.Mode2Value))
@@ -182,7 +183,7 @@ namespace VoiceMeeter
             }
 
             // Set the image
-            if (!String.IsNullOrEmpty(settings.UserImage1) && IsMode1(false))
+            if (!String.IsNullOrEmpty(settings.UserImage1) && IsMode1(false, "") )
             {
                 await Connection.SetImageAsync(Tools.FileToBase64(settings.UserImage1.ToString(), true));
             }
@@ -233,8 +234,21 @@ namespace VoiceMeeter
 
         #region Private Methods
 
-        private bool IsMode1(bool shouldLog)
+        private string RemoveQuotes(string thatString)
         {
+            //
+            // Remove whites spaces, then remove leading and ending quotation marks...
+            //
+            thatString = thatString.Trim();
+            thatString = thatString.TrimStart('"');
+            thatString = thatString.TrimEnd('"');
+
+            return thatString;
+        }
+
+        private bool IsMode1(bool shouldLog, string pressType)
+        {
+
             if (String.IsNullOrEmpty(settings.Mode1Param))
             {
                 return false;
@@ -284,6 +298,90 @@ namespace VoiceMeeter
                     }
                 }
                 return false;
+            }
+            //
+            // Only fire for advance toggle...
+            //
+            else if(pressType == "VoiceMeeter.VMAdvancedToggleAction" && settings.Mode1Param.Contains(LOGICAL_CUST))
+            {
+                
+                //
+                // Let's figure out which logical operator we are using...
+                // Then split the string based on that
+                //
+                if( settings.Mode1Param.Contains("==") )
+                {
+                    string[] separator = { "==" };
+                    string[] eq_bits = settings.Mode1Param.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
+
+                    //
+                    // Clean up the remote value...
+                    //
+                    string remoteParam = eq_bits[0].Substring(LOGICAL_CUST.Length).Trim();
+                    
+                    //
+                    // Get the value from VM...
+                    //
+                    string remoteValue = VMManager.Instance.GetParamString(remoteParam);
+
+                    //
+                    // Remove quotes from comparison operator...
+                    //
+                    string compVal = RemoveQuotes(eq_bits[1]);
+
+                    if (shouldLog)
+                    {
+                        Logger.Instance.LogMessage(TracingLevel.INFO, $"Mode1 returned: {remoteValue} == {compVal}");
+                    }
+
+                    return remoteValue == compVal;
+
+                }
+
+                //
+                // Let's figure out which logical operator we are using...
+                // Then split the string based on that
+                //
+                if (settings.Mode1Param.Contains("!="))
+                {
+                    string[] separator = { "!=" };
+                    string[] eq_bits = settings.Mode1Param.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
+
+                    //
+                    // Clean up the remote value...
+                    //
+                    string remoteParam = eq_bits[0].Substring(LOGICAL_CUST.Length).Trim();
+
+                    //
+                    // Get the value from VM...
+                    //
+                    string remoteValue = VMManager.Instance.GetParamString(remoteParam);
+
+                    //
+                    // Remove quotes from comparison operator...
+                    //
+                    string compVal = RemoveQuotes(eq_bits[1]);
+
+                    if (shouldLog)
+                    {
+                        Logger.Instance.LogMessage(TracingLevel.INFO, $"Mode1 returned: {remoteValue} != {compVal}");
+                    }
+
+                    return remoteValue != compVal;
+
+                }
+
+                //
+                // If you made it here, then there was no matching operator...
+                //
+                if (shouldLog)
+                {
+                    Logger.Instance.LogMessage(TracingLevel.ERROR, $"No matching comparison operator: only supports == and !=");
+                }
+
+                return true;
+
+
             }
             else // Only one clause
             {

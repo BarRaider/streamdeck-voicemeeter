@@ -1,5 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Text;
+using BarRaider.SdTools;
 
 namespace VoiceMeeterWrapper
 {
@@ -31,6 +33,15 @@ namespace VoiceMeeterWrapper
             float output = -1;
             VoiceMeeterRemote.GetParameter(n, ref output);
             return output;
+        }
+
+        public string GetParamString( string n)
+        {
+            //string output = "";
+            StringBuilder output = new StringBuilder(512);
+            VoiceMeeterRemote.GetParameter(n, output);
+
+            return output.ToString();
         }
 
         public void SetParam(string n, float v)
