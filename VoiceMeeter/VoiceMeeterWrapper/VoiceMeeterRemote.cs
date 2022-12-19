@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Text;
 
 namespace VoiceMeeterWrapper
 {
@@ -20,7 +21,7 @@ namespace VoiceMeeterWrapper
         public static extern int GetParameter(string szParamName, ref float value);
 
         [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_GetParameterStringA")]
-        public static extern int GetParameter(string szParamName, ref string value);
+        public static extern int GetParameter(string szParamName, StringBuilder value);
 
         [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_IsParametersDirty")]
         public static extern int IsParametersDirty();
