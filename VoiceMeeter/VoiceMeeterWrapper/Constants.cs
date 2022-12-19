@@ -10,5 +10,6 @@ namespace VoiceMeeter
     {
         public const string ENABLED_VALUE = "1";
         public const string DISABLED_VALUE = "0";
+        public const string VOICEMEETER_REMOTE_DLL = "VoicemeeterRemote64.dll";
     }
 }

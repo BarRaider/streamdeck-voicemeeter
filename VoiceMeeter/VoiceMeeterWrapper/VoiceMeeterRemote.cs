@@ -1,44 +1,45 @@
 ﻿using System;
 using System.Runtime.InteropServices;
 using System.Text;
+using VoiceMeeter;
 
 namespace VoiceMeeterWrapper
 {
     public static class VoiceMeeterRemote
     {
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_Login")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_Login")]
         public static extern VbLoginResponse Login();
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_Logout")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_Logout")]
         public static extern VbLoginResponse Logout();
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_SetParameterFloat")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_SetParameterFloat")]
         public static extern int SetParameter(string szParamName, float value);
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_SetParameterStringA")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_SetParameterStringA")]
         public static extern int SetParameter(string szParamName, string value);
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_GetParameterFloat")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_GetParameterFloat")]
         public static extern int GetParameter(string szParamName, ref float value);
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_GetParameterStringA")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_GetParameterStringA")]
         public static extern int GetParameter(string szParamName, StringBuilder value);
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_IsParametersDirty")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_IsParametersDirty")]
         public static extern int IsParametersDirty();
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_MacroButton_IsDirty")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_MacroButton_IsDirty")]
         public static extern int IsMacrosDirty();
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_GetVoicemeeterVersion")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_GetVoicemeeterVersion")]
         public static extern int GetVoicemeeterVersion(ref long value);
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_SetParameters")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_SetParameters")]
         public static extern int SetParameters(string szParameters);
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_MacroButton_GetStatus")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_MacroButton_GetStatus")]
         public static extern int GetMacroStatus(int buttonId, ref float value, int bitmode);
 
-        [DllImport("VoicemeeterRemote.dll", EntryPoint = "VBVMR_MacroButton_SetStatus")]
+        [DllImport(Constants.VOICEMEETER_REMOTE_DLL, EntryPoint = "VBVMR_MacroButton_SetStatus")]
         public static extern int SetMacroStatus(int buttonId, float value, int bitmode);
 
         [DllImport("kernel32.dll")]
