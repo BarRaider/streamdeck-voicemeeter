@@ -34,7 +34,6 @@ namespace VoiceMeeterWrapper
         }
         public VmClient()
         {
-           System.Threading.Thread.Sleep(15000);
             //Find Voicemeeter dir.
             var vmDir = GetVoicemeeterDir();
             if (vmDir != null)
