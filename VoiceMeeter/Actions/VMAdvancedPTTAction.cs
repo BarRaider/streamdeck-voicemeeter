@@ -12,7 +12,7 @@ using VoiceMeeter.Midi;
 namespace VoiceMeeter
 {
     [PluginActionId("com.barraider.vmadvancedptt")]
-    public class VMAdvancedPTTAction : PluginBase
+    public class VMAdvancedPTTAction : KeypadBase
     {
         private class PluginSettings
         {
@@ -139,15 +139,12 @@ namespace VoiceMeeter
                 await Connection.SetImageAsync((String)null);
             }
 
+
+            string titlePrefix = settings.TitlePrefix?.Replace(@"\n", "\n");
+            string value = String.Empty;
             if (settings.TitleType == TitleTypeEnum.VMLive && !String.IsNullOrEmpty(settings.TitleParam))
             {
-                string prefix = String.Empty;
-                if (!String.IsNullOrEmpty(settings.TitlePrefix))
-                {
-                    prefix = settings.TitlePrefix.Replace(@"\n", "\n");
-                }
-
-                string value = VMManager.Instance.GetParam(settings.TitleParam);
+                value = VMManager.Instance.GetParam(settings.TitleParam);
                 if (!String.IsNullOrEmpty(settings.EnabledText) && !String.IsNullOrEmpty(value) && value == Constants.ENABLED_VALUE)
                 {
                     value = settings.EnabledText;
@@ -156,8 +153,11 @@ namespace VoiceMeeter
                 {
                     value = settings.DisabledText;
                 }
+            }
 
-                await Connection.SetTitleAsync($"{prefix}{value}");
+            if (!String.IsNullOrEmpty($"{titlePrefix}{value}"))
+            {
+                await Connection.SetTitleAsync($"{titlePrefix}{value}");
             }
         }
 

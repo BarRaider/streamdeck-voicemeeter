@@ -25,7 +25,7 @@ namespace VoiceMeeter
     // Subscriber: brandoncc2 x2 Gifted subs
     //---------------------------------------------------
     [PluginActionId("com.barraider.vmadvancedtoggle")]
-    class VMAdvancedToggleAction : PluginBase
+    class VMAdvancedToggleAction : KeypadBase
     {
         private class PluginSettings
         {
@@ -193,15 +193,11 @@ namespace VoiceMeeter
             }
 
             // Set the title
+            string titlePrefix = settings.TitlePrefix?.Replace(@"\n", "\n");
+            string value = String.Empty;
             if (settings.TitleType == TitleTypeEnum.VMLive && !String.IsNullOrEmpty(settings.TitleParam))
             {
-                string prefix = String.Empty;
-                if (!String.IsNullOrEmpty(settings.TitlePrefix))
-                {
-                    prefix = settings.TitlePrefix.Replace(@"\n", "\n");
-                }
-
-                string value = VMManager.Instance.GetParam(settings.TitleParam);
+                value = VMManager.Instance.GetParam(settings.TitleParam);
                 if (!String.IsNullOrEmpty(settings.EnabledText) && !String.IsNullOrEmpty(value) && value == Constants.ENABLED_VALUE)
                 {
                     value = settings.EnabledText.Replace(@"\n", "\n"); ;
@@ -210,8 +206,11 @@ namespace VoiceMeeter
                 {
                     value = settings.DisabledText.Replace(@"\n", "\n"); ;
                 }
+            }
 
-                await Connection.SetTitleAsync($"{prefix}{value}");
+            if (!String.IsNullOrEmpty($"{titlePrefix}{value}"))
+            {
+                await Connection.SetTitleAsync($"{titlePrefix}{value}");
             }
         }
 
