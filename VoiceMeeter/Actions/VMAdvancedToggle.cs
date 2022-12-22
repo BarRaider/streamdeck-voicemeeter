@@ -137,7 +137,7 @@ namespace VoiceMeeter
                 return;
             }
 
-            bool isMode1 = IsMode1(true, this.GetType().ToString());
+            bool isMode1 = IsMode1LogicTrue(true, true);
             if (isMode1) // Currently in Mode1, so run Mode2 commands
             {
                 if (!String.IsNullOrEmpty(settings.Mode2Value))
@@ -183,7 +183,7 @@ namespace VoiceMeeter
             }
 
             // Set the image
-            if (!String.IsNullOrEmpty(settings.UserImage1) && IsMode1(false, "") )
+            if (!String.IsNullOrEmpty(settings.UserImage1) && IsMode1LogicTrue(false, false) )
             {
                 await Connection.SetImageAsync(Tools.FileToBase64(settings.UserImage1.ToString(), true));
             }
@@ -234,19 +234,12 @@ namespace VoiceMeeter
 
         #region Private Methods
 
-        private string RemoveQuotes(string thatString)
+        private string RemoveQuotes(string str)
         {
-            //
-            // Remove whites spaces, then remove leading and ending quotation marks...
-            //
-            thatString = thatString.Trim();
-            thatString = thatString.TrimStart('"');
-            thatString = thatString.TrimEnd('"');
-
-            return thatString;
+            return str.Trim().Trim('"');
         }
 
-        private bool IsMode1(bool shouldLog, string pressType)
+        private bool IsMode1LogicTrue(bool shouldLog, bool keyPressed)
         {
 
             if (String.IsNullOrEmpty(settings.Mode1Param))
@@ -302,9 +295,8 @@ namespace VoiceMeeter
             //
             // Only fire for advance toggle...
             //
-            else if(pressType == "VoiceMeeter.VMAdvancedToggleAction" && settings.Mode1Param.Contains(LOGICAL_CUST))
+            else if(keyPressed && settings.Mode1Param.Contains(LOGICAL_CUST))
             {
-                
                 //
                 // Let's figure out which logical operator we are using...
                 // Then split the string based on that
