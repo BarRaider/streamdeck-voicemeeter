@@ -100,7 +100,7 @@ namespace VoiceMeeter
         #region Private members
         private const string LOGICAL_AND = " AND ";
         private const string LOGICAL_OR = " OR ";
-        private const string LOGICAL_CUST = "ADV ";
+        private readonly string[] LOGICAL_COMP_OPERATORS = { "==", "!=" };
 
         private readonly PluginSettings settings;
         private bool didSetNotConnected = false;
@@ -183,7 +183,7 @@ namespace VoiceMeeter
             }
 
             // Set the image
-            if (!String.IsNullOrEmpty(settings.UserImage1) && IsMode1LogicTrue(false, false) )
+            if (!String.IsNullOrEmpty(settings.UserImage1) && IsMode1LogicTrue(false, false))
             {
                 await Connection.SetImageAsync(Tools.FileToBase64(settings.UserImage1.ToString(), true));
             }
@@ -263,7 +263,7 @@ namespace VoiceMeeter
                 foreach (string clause in clauses)
                 {
                     // If even one of them is false, that's enough to return a false
-                    if (!VMManager.Instance.GetParamBool(clause.Trim()))
+                    if (!EvaluateClause(clause.Trim()))
                     {
                         if (shouldLog)
                         {
@@ -280,7 +280,7 @@ namespace VoiceMeeter
                 foreach (string clause in clauses)
                 {
                     // If ANY clause is true, that's enough to return a true
-                    if (VMManager.Instance.GetParamBool(clause.Trim()))
+                    if (EvaluateClause(clause.Trim()))
                     {
                         if (shouldLog)
                         {
@@ -291,92 +291,9 @@ namespace VoiceMeeter
                 }
                 return false;
             }
-            //
-            // Only fire for advance toggle...
-            //
-            else if(keyPressed && settings.Mode1Param.Contains(LOGICAL_CUST))
-            {
-                //
-                // Let's figure out which logical operator we are using...
-                // Then split the string based on that
-                //
-                if( settings.Mode1Param.Contains("==") )
-                {
-                    string[] separator = { "==" };
-                    string[] eq_bits = settings.Mode1Param.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
-
-                    //
-                    // Clean up the remote value...
-                    //
-                    string remoteParam = eq_bits[0].Substring(LOGICAL_CUST.Length).Trim();
-                    
-                    //
-                    // Get the value from VM...
-                    //
-                    string remoteValue = VMManager.Instance.GetParamString(remoteParam);
-
-                    //
-                    // Remove quotes from comparison operator...
-                    //
-                    string compVal = RemoveQuotes(eq_bits[1]);
-
-                    if (shouldLog)
-                    {
-                        Logger.Instance.LogMessage(TracingLevel.INFO, $"Mode1 returned: {remoteValue} == {compVal}");
-                    }
-
-                    return remoteValue == compVal;
-
-                }
-
-                //
-                // Let's figure out which logical operator we are using...
-                // Then split the string based on that
-                //
-                if (settings.Mode1Param.Contains("!="))
-                {
-                    string[] separator = { "!=" };
-                    string[] eq_bits = settings.Mode1Param.Split(separator, System.StringSplitOptions.RemoveEmptyEntries);
-
-                    //
-                    // Clean up the remote value...
-                    //
-                    string remoteParam = eq_bits[0].Substring(LOGICAL_CUST.Length).Trim();
-
-                    //
-                    // Get the value from VM...
-                    //
-                    string remoteValue = VMManager.Instance.GetParamString(remoteParam);
-
-                    //
-                    // Remove quotes from comparison operator...
-                    //
-                    string compVal = RemoveQuotes(eq_bits[1]);
-
-                    if (shouldLog)
-                    {
-                        Logger.Instance.LogMessage(TracingLevel.INFO, $"Mode1 returned: {remoteValue} != {compVal}");
-                    }
-
-                    return remoteValue != compVal;
-
-                }
-
-                //
-                // If you made it here, then there was no matching operator...
-                //
-                if (shouldLog)
-                {
-                    Logger.Instance.LogMessage(TracingLevel.ERROR, $"No matching comparison operator: only supports == and !=");
-                }
-
-                return true;
-
-
-            }
             else // Only one clause
             {
-                return VMManager.Instance.GetParamBool(settings.Mode1Param);
+                return EvaluateClause(settings.Mode1Param);
             }
 
         }
@@ -399,6 +316,73 @@ namespace VoiceMeeter
                 settings.Mode2Hotkey = mode2Hotkey;
                 SaveSettings();
             }
+        }
+
+        private bool EvaluateClause(string clause)
+        {
+            // TODO: Check if clause starts with $ and if so, split it and compare to clauses
+            if (LOGICAL_COMP_OPERATORS.Any(op => clause.Contains(op)))
+            {
+                return HandleEQClause(clause);
+            }
+            return VMManager.Instance.GetParamBool(clause);
+        }
+
+        private bool EvaluateEQClause(string splitSeperator, string clause)
+        {
+            var splitClause = clause.Split(new string[] { splitSeperator }, StringSplitOptions.RemoveEmptyEntries);
+
+            if (splitClause.Length != 2)
+            {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"{this.GetType()} Invalid clause: {clause} with logical operator: {splitSeperator}");
+                return false;
+            }
+
+            string termValue = VMManager.Instance.GetParamString(splitClause[0].Trim());
+            string compareValue = RemoveQuotes(splitClause[1]);
+
+            // Normal string comparison
+            if (termValue == compareValue)
+            {
+                return true;
+            }
+
+            // Numeric comparison
+            if (double.TryParse(termValue, out double value1) && double.TryParse(compareValue, out double value2) && value1 == value2)
+            {
+                return true;
+            }
+
+            // Substring comparison
+            if (termValue.Length >= compareValue.Length && termValue.Substring(0,compareValue.Length) == compareValue)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        private bool HandleEQClause(string clause)
+        {
+            // Figure out which logical operator we are using...
+            // Then split the string based on that
+           
+            if (clause.Contains("=="))
+            {
+                bool result = EvaluateEQClause("==", clause);
+                return (result == true);
+            }
+            else if (clause.Contains("!="))
+            {
+                bool result = EvaluateEQClause("!=", clause);
+                return (result == false);
+            }
+            else
+            {
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"No matching comparison operator: only supports == and !=");
+            }
+            
+            return false;
         }
 
         #endregion
