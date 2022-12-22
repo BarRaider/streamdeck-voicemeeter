@@ -32,7 +32,7 @@ namespace VoiceMeeter
     // 17 Bits: TwilightLinkable
     //---------------------------------------------------
     [PluginActionId("com.barraider.vmmacrotoggle")]
-    class VMMacroToggle : PluginBase
+    class VMMacroToggle : KeypadBase
     {
         private enum MacroToggleMode
         {
@@ -89,8 +89,8 @@ namespace VoiceMeeter
         private int buttonId = DEFAULT_BUTTON_ID;
         private bool isButtonEnabled = false;
         private bool startingToggleMode = false;
-        private Image enabledImage = null;
-        private Image disabledImage = null;
+        private string enabledImageStr;
+        private string disabledImageStr;
         private bool didSetNotConnected = false;
 
         #endregion
@@ -185,19 +185,15 @@ namespace VoiceMeeter
             // Set the image
             if (isButtonEnabled)
             {
-                await Connection.SetImageAsync(enabledImage);
+                await Connection.SetImageAsync(enabledImageStr);
             }
             else
             {
-                await Connection.SetImageAsync(disabledImage);
+                await Connection.SetImageAsync(disabledImageStr);
             }
 
             // Set the title
-            string prefix = String.Empty;
-            if (!String.IsNullOrEmpty(settings.TitlePrefix))
-            {
-                prefix = settings.TitlePrefix.Replace(@"\n", "\n");
-            }
+            string titlePrefix = settings.TitlePrefix?.Replace(@"\n", "\n");
 
             string value = isButtonEnabled ? "1" : "0";
             if (!String.IsNullOrEmpty(settings.EnabledText) && !String.IsNullOrEmpty(value) && value == Constants.ENABLED_VALUE)
@@ -209,7 +205,7 @@ namespace VoiceMeeter
                 value = settings.DisabledText.Replace(@"\n", "\n"); ;
             }
 
-            await Connection.SetTitleAsync($"{prefix}{value}");
+            await Connection.SetTitleAsync($"{titlePrefix}{value}");
 
         }
 
@@ -253,20 +249,8 @@ namespace VoiceMeeter
         {
             try
             {
-                if (enabledImage != null)
-                {
-                    enabledImage.Dispose();
-                    enabledImage = null;
-                }
-
-                if (disabledImage != null)
-                {
-                    disabledImage.Dispose();
-                    disabledImage = null;
-                }
-
-                enabledImage = Image.FromFile(TryGetCustomFile(settings.EnabledImage, DEFAULT_BUTTON_IMAGES[1]));
-                disabledImage = Image.FromFile(TryGetCustomFile(settings.DisabledImage, DEFAULT_BUTTON_IMAGES[0]));
+                enabledImageStr = Image.FromFile(TryGetCustomFile(settings.EnabledImage, DEFAULT_BUTTON_IMAGES[1])).ToBase64(true);
+                disabledImageStr = Image.FromFile(TryGetCustomFile(settings.DisabledImage, DEFAULT_BUTTON_IMAGES[0])).ToBase64(true);
             }
             catch (Exception ex)
             {

@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace VoiceMeeter
 {
     [PluginActionId("com.barraider.vmmodify")]
-    class VMModifyAction : PluginBase
+    class VMModifyAction : KeypadBase
     {
         private enum ParamTypeEnum
         {
@@ -162,15 +162,17 @@ namespace VoiceMeeter
                 LongKeyPressed();
             }
 
+            // Set the title
+            string titlePrefix = settings.TitlePrefix?.Replace(@"\n", "\n");
+            string value = String.Empty;
             if (settings.TitleType == TitleTypeEnum.VMLive)
             {
-                string prefix = String.Empty;
-                if (!String.IsNullOrEmpty(settings.TitlePrefix))
-                {
-                    prefix = settings.TitlePrefix.Replace(@"\n", "\n");
-                }
+                value = VMManager.Instance.GetParam(BuildDeviceName());
+            }
 
-                await Connection.SetTitleAsync($"{prefix}{VMManager.Instance.GetParam(BuildDeviceName())}");
+            if (!String.IsNullOrEmpty($"{titlePrefix}{value}"))
+            {
+                await Connection.SetTitleAsync($"{titlePrefix}{value}");
             }
         }
 
@@ -179,10 +181,10 @@ namespace VoiceMeeter
             Logger.Instance.LogMessage(TracingLevel.INFO, "Destructor called");
         }
 
-        public override void ReceivedSettings(ReceivedSettingsPayload payload) 
+        public async override void ReceivedSettings(ReceivedSettingsPayload payload) 
         {
-            // New in StreamDeck-Tools v2.0:
             Tools.AutoPopulateSettings(settings, payload.Settings);
+            await SaveSettings();
         }
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
@@ -194,6 +196,11 @@ namespace VoiceMeeter
         private string BuildDeviceName()
         {
             return $"{settings.Strip}[{settings.StripNum}].{settings.ParamType}";
+        }
+
+        private Task SaveSettings()
+        {
+            return Connection.SetSettingsAsync(JObject.FromObject(settings));
         }
 
         #endregion
