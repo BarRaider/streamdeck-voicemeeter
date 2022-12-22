@@ -36,14 +36,9 @@
 		<Error Condition="!Exists('..\..\..\DotNet\StreamDeck\packages\RtMidi.Core.1.0.51\build\RtMidi.Core.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\DotNet\StreamDeck\packages\RtMidi.Core.1.0.51\build\RtMidi.Core.targets'))" />
 	</Target>
 	<ItemGroup>
-		<PackageReference Include="CommandLineParser" Version="2.8.0" />
-		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
-		<PackageReference Include="NLog" Version="4.7.10" />
 		<PackageReference Include="RtMidi.Core" Version="1.0.51" />
-		<PackageReference Include="Serilog" Version="2.10.0" />
-		<PackageReference Include="streamdeck-client-csharp" Version="4.3.0" />
-		<PackageReference Include="StreamDeck-Tools" Version="3.2.0" />
-		<PackageReference Include="System.Drawing.Common" Version="5.0.2" />
+		<PackageReference Include="Serilog" Version="2.12.0" />
+		<PackageReference Include="StreamDeck-Tools" Version="5.9.1-Beta1" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="CommandLine, Version=2.8.0.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">
@@ -160,6 +155,9 @@
 		<Content Include="PropertyInspector\VoiceMeeter\AdvancedKeypress.html">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+		<Content Include="PropertyInspector\VoiceMeeter\AdjustSettingDial.html">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Content Include="PropertyInspector\VoiceMeeter\MacroToggle.html">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
@@ -169,6 +167,9 @@
 		<Content Include="PropertyInspector\VoiceMeeter\Microphone.html">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
+		<Content Include="PropertyInspector\VoiceMeeter\GainAdjustDial.html">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		</Content>
 		<Content Include="PropertyInspector\VoiceMeeter\Modify.html">
 			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
 		</Content>
@@ -176,5 +177,59 @@
 	<ItemGroup>
 		<Compile Remove="obj\x64\Debug\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
 		<Compile Remove="obj\x64\Release\.NETFramework,Version=v4.8.AssemblyAttributes.cs" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Remove="PropertyInspector\VoiceMeeter\AdjustSettingDial.html" />
+	  <None Remove="PropertyInspector\VoiceMeeter\GainAdjustDial.html" />
+	</ItemGroup>
+	<ItemGroup>
+	  <None Update="Images\settingAdjustAction%402x.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\settingAdjustAction.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\settingAdjustIcon%402x.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\settingAdjustIcon.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="settingAdjustDialLayout.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="gainAdjustDialLayout.json">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\audioMute.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\muteEnabled.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\soundAction%402x.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\soundAction.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\soundIcon%402x.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\soundIcon.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\volumeAction%402x.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\volumeAction.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\volumeIcon%402x.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
+	  <None Update="Images\volumeIcon.png">
+	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </None>
 	</ItemGroup>
 </Project>
