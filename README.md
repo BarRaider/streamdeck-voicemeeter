@@ -3,6 +3,16 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
 **Author's website and contact information:** [https://barraider.com](https://barraider.com)
 
+## New in v2.1
+- **Advanced Queries Support** - The `Advanced Toggle` action's `Mode1 Check` now supports performing complex queries with `==` and `!=` as well as `AND/OR`. 
+    - Example: `Strip[0].Mute AND Strip[1].Gain==7.5 AND Strip[2].device.name!="Elgato Wave"`
+
+-  🆕 **Stream Deck+ Support **
+    - New `Gain Adjust` action allows you to control the volume of a Strip/Bus from the Dials. Pressing the dial will toggle mute.
+    - New `Setting Adjust` action allows you to control the main dials (Comp/Gate/Denoiser/Reverb/Delay...) from the Dials.
+- The topmost "Title" property has been disabled and you can now use the (lower) Title Property's `-User Defined-`  logic to put a manual title using the ` Title Prefix` field
+- 64bit runtime optimization with VoiceMeeter's DLLs
+
 ## New in v1.9
 - :new: **MacroButton support!** Toggle VoiceMeeter Macro Buttons from the Stream Deck
     - Supports both "Toggle" mode and "PTT" mode.
