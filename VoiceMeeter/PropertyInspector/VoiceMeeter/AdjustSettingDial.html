@@ -46,6 +46,18 @@
                 <option value="6">reverb</option>
             </select>
         </div>
+        <div class="sdpi-item" id="dvStepSize">
+            <div class="sdpi-item-label">Step Size</div>
+            <select class="sdpi-item-value select sdProperty" id="stepSize" oninput="setSettings()">
+                <option value="0.1">0.1</option>
+                <option value="0.2">0.2</option>
+                <option value="0.5">0.5</option>
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+            </select>
+        </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Title (optional)</div>
             <input class="sdpi-item-value sdProperty" placeholder="" value="" id="title" oninput="setSettings()">

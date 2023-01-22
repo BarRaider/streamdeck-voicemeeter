@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,6 @@ namespace VoiceMeeter
             fx2 = 4,
             gate = 5,
             reverb = 6,
-            
         }
 
         private enum StripBusType
@@ -41,6 +41,7 @@ namespace VoiceMeeter
                     ParamType = ParamTypeEnum.comp,
                     Strip = StripBusType.Strip,
                     StripNum = 0,
+                    StepSize = DEFAULT_STEP_SIZE.ToString(),
                     Title = String.Empty
                 };
 
@@ -56,6 +57,9 @@ namespace VoiceMeeter
             [JsonProperty(PropertyName = "stripNum")]
             public int StripNum { get; set; }
 
+            [JsonProperty(PropertyName = "stepSize")]
+            public string StepSize { get; set; }
+
             [JsonProperty(PropertyName = "title")]
             public string Title { get; set; }
         }
@@ -64,6 +68,7 @@ namespace VoiceMeeter
 
         private const float MIN_VALUE = 0;
         private const float MAX_VALUE = 10;
+        private const double DEFAULT_STEP_SIZE = 1;
 
         private readonly PluginSettings settings;
         private readonly string[] DEFAULT_IMAGES = new string[]
@@ -73,6 +78,7 @@ namespace VoiceMeeter
         private string mainImageStr;
         private bool didSetNotConnected = false;
         private bool dialWasRotated = false;
+        private double stepSize = DEFAULT_STEP_SIZE;
 
         #endregion
 
@@ -90,6 +96,7 @@ namespace VoiceMeeter
                 this.settings = payload.Settings.ToObject<PluginSettings>();
             }
             PrefetchImages(DEFAULT_IMAGES);
+            InitializeSettings();
         }
 
         #endregion
@@ -108,7 +115,7 @@ namespace VoiceMeeter
 
             dialWasRotated = true;
             float.TryParse(VMManager.Instance.GetParam(BuildDeviceName()), out float value);
-            double increment = payload.Ticks * 0.5;
+            double increment = payload.Ticks * stepSize;
             double outputValue = value + increment;
             outputValue = Math.Max(MIN_VALUE, outputValue);
             outputValue = Math.Min(MAX_VALUE, outputValue);
@@ -188,6 +195,7 @@ namespace VoiceMeeter
         public async override void ReceivedSettings(ReceivedSettingsPayload payload) 
         {
             Tools.AutoPopulateSettings(settings, payload.Settings);
+            InitializeSettings();
             await SaveSettings();
         }
 
@@ -221,6 +229,15 @@ namespace VoiceMeeter
         private void DisableSetting()
         {
             VMManager.Instance.SetParam(BuildDeviceName(), 0);
+        }
+
+        private void InitializeSettings()
+        {
+            if (!double.TryParse(settings.StepSize, out stepSize))
+            {
+                stepSize = DEFAULT_STEP_SIZE;
+                SaveSettings();
+            }
         }
 
         #endregion

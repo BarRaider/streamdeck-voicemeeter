@@ -40,6 +40,9 @@ namespace VoiceMeeter
             [JsonProperty(PropertyName = "stripNum")]
             public int StripNum { get; set; }
 
+            [JsonProperty(PropertyName = "stepSize")]
+            public string StepSize { get; set; }
+
             [JsonProperty(PropertyName = "title")]
             public string Title { get; set; }
         }
@@ -49,6 +52,7 @@ namespace VoiceMeeter
         private readonly PluginSettings settings;
         private const float MIN_DB_VALUE = -60f;
         private const float MAX_DB_VALUE = 12f;
+        private const double DEFAULT_STEP_SIZE = 1;
 
         private readonly string[] DEFAULT_IMAGES = new string[]
        {
@@ -59,6 +63,7 @@ namespace VoiceMeeter
         private string unmutedImageStr;
         private bool didSetNotConnected = false;
         private bool dialWasRotated = false;
+        private double stepSize = DEFAULT_STEP_SIZE;
 
         #endregion
 
@@ -76,6 +81,7 @@ namespace VoiceMeeter
                 this.settings = payload.Settings.ToObject<PluginSettings>();
             }
             PrefetchImages(DEFAULT_IMAGES);
+            InitializeSettings();
         }
 
         #endregion
@@ -94,12 +100,12 @@ namespace VoiceMeeter
 
             dialWasRotated = true;
             float.TryParse(VMManager.Instance.GetParam(BuildDeviceName()), out float volume);
-            int increment = payload.Ticks;
+            double increment = payload.Ticks * stepSize;
             if (payload.IsDialPressed)
             {
                 increment = 10 * (payload.Ticks > 0 ? 1 : -1);
             }
-            double outputVolume = Math.Round(volume + increment);
+            double outputVolume = volume + increment;
             outputVolume = Math.Max(MIN_DB_VALUE, outputVolume);
             outputVolume = Math.Min(MAX_DB_VALUE, outputVolume);
 
@@ -188,6 +194,7 @@ namespace VoiceMeeter
         public async override void ReceivedSettings(ReceivedSettingsPayload payload)
         {
             Tools.AutoPopulateSettings(settings, payload.Settings);
+            InitializeSettings();
             await SaveSettings();
         }
 
@@ -228,6 +235,15 @@ namespace VoiceMeeter
         {
             bool isMuted = VMManager.Instance.GetParamBool(BuildMuteName());
             VMManager.Instance.SetParam(BuildMuteName(), ((!isMuted) ? 1 : 0));
+        }
+
+        private void InitializeSettings()
+        {
+            if (!double.TryParse(settings.StepSize, out stepSize))
+            {
+                stepSize = DEFAULT_STEP_SIZE;
+                SaveSettings();
+            }
         }
 
         #endregion

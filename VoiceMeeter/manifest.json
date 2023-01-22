@@ -158,7 +158,7 @@
   "Name": "VoiceMeeter Integration",
   "Icon": "Images/pluginIcon",
   "URL": "https://BarRaider.com/",
-  "Version": "2.0.2",
+  "Version": "2.1",
   "CodePath": "com.barraider.voicemeeter.exe",
   "Category": "VoiceMeeter [BarRaider]",
   "CategoryIcon": "Images/categoryIcon",
