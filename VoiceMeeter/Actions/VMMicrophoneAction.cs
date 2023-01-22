@@ -3,11 +3,12 @@ using HotkeyCommands;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
+using System.Threading.Tasks;
 
 namespace VoiceMeeter
 {
     [PluginActionId("com.barraider.vmmicrophone")]
-    class VMMicrophoneAction : PluginBase
+    class VMMicrophoneAction : KeypadBase
     {
         private enum MicTypeEnum
         {
@@ -186,11 +187,8 @@ namespace VoiceMeeter
 
         public async override void ReceivedSettings(ReceivedSettingsPayload payload)
         {
-            // New in StreamDeck-Tools v2.0:
             Tools.AutoPopulateSettings(settings, payload.Settings);
-
-            // Used to return the correct filename back to the Property Inspector
-            await Connection.SetSettingsAsync(JObject.FromObject(settings));
+            await SaveSettings();
         }
 
         public override void ReceivedGlobalSettings(ReceivedGlobalSettingsPayload payload) { }
@@ -242,6 +240,11 @@ namespace VoiceMeeter
         private string BuildDeviceName()
         {
             return $"{settings.Strip}[{settings.StripNum}].Mute";
+        }
+
+        private Task SaveSettings()
+        {
+            return Connection.SetSettingsAsync(JObject.FromObject(settings));
         }
         #endregion
     }

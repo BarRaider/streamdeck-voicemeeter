@@ -1,5 +1,8 @@
 ﻿using Microsoft.Win32;
 using System;
+using System.Text;
+using BarRaider.SdTools;
+using VoiceMeeter;
 
 namespace VoiceMeeterWrapper
 {
@@ -7,30 +10,52 @@ namespace VoiceMeeterWrapper
     {
         public VbLoginResponse LoginResponse { get; private set; }
         private Action _onClose = null;
+
+        private readonly string[] VM_UNINSTALL_REG_LOCATIONS = { @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall",
+                                                @"HKEY_LOCAL_MACHINE\SOFTWARE\WOW6432Node\Microsoft\Windows\CurrentVersion\Uninstall"};
+        const string VM_UNINSTALL_KEY = "VB:Voicemeeter {17359A74-1236-5467}";
+        
+
         private string GetVoicemeeterDir()
         {
-            const string regKey = @"HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall";
-            const string uninstKey = "VB:Voicemeeter {17359A74-1236-5467}";
-            var key = $"{regKey}\\{uninstKey}";
-            var k = Registry.GetValue(key, "UninstallString", null);
-            if (k == null)
+            foreach (var regKey in VM_UNINSTALL_REG_LOCATIONS)
             {
-                throw new Exception("Voicemeeter not found");
+                var key = $"{regKey}\\{VM_UNINSTALL_KEY}";
+                var k = Registry.GetValue(key, "UninstallString", null);
+                if (k == null)
+                {
+                    continue;
+                }
+                return System.IO.Path.GetDirectoryName(k.ToString());
             }
-            return System.IO.Path.GetDirectoryName(k.ToString());
+
+            Logger.Instance.LogMessage(TracingLevel.FATAL, $"{this.GetType()} Voicemeeter not found");
+            return null;
         }
         public VmClient()
         {
             //Find Voicemeeter dir.
             var vmDir = GetVoicemeeterDir();
-            VoiceMeeterRemote.LoadDll(System.IO.Path.Combine(vmDir, "VoicemeeterRemote.dll"));
-            LoginResponse = VoiceMeeterRemote.Login();
+            if (vmDir != null)
+            {
+                VoiceMeeterRemote.LoadDll(System.IO.Path.Combine(vmDir, Constants.VOICEMEETER_REMOTE_DLL));
+                LoginResponse = VoiceMeeterRemote.Login();
+            }
         }
         public float GetParam(string n)
         {
             float output = -1;
             VoiceMeeterRemote.GetParameter(n, ref output);
             return output;
+        }
+
+        public string GetParamString( string n)
+        {
+            //string output = "";
+            StringBuilder output = new StringBuilder(512);
+            VoiceMeeterRemote.GetParameter(n, output);
+
+            return output.ToString();
         }
 
         public void SetParam(string n, float v)

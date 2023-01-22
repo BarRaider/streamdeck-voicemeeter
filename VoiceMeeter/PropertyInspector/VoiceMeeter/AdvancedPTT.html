@@ -17,15 +17,17 @@
         <details class="message info">
             <summary>For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.com</span> </summary>
         </details>
-        <details class="message question">
-            <summary>This plugins allows you to send a list of commands directly to VoiceMeeter (click this text for more info...)</summary>
-            <p>
-                Example: "Strip[0].mono=1;Bus[2].Gain=-20;"
-            </p>
-            <p>
-                For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.com</span>
-            </p>
-        </details>
+        <div class="sdpi-item">
+            <details class="message question">
+                <summary>This plugins allows you to send a list of commands directly to VoiceMeeter (click this text for more info...)</summary>
+                <p>
+                    Example: "Strip[0].mono=1;Bus[2].Gain=-20;"
+                </p>
+                <p>
+                    More examples at <span class="linkspan">https://docs.BarRaider.com</span>
+                </p>
+            </details>
+        </div>
         <div class="sdpi-item">
             <div class="sdpi-item-label">Keypress</div>
             <input class="sdpi-item-value sdProperty" placeholder="Configuration to set on keypress" value="" id="keyPressValue" oninput="setSettings()">

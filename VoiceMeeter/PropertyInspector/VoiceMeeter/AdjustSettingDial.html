@@ -1,0 +1,67 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name=viewport content="width=device-width,initial-scale=1,maximum-scale=1,minimum-scale=1,user-scalable=no,minimal-ui,viewport-fit=cover">
+    <meta name=apple-mobile-web-app-capable content=yes>
+    <meta name=apple-mobile-web-app-status-bar-style content=black>
+    <title>Gain Adjust</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/barraider/streamdeck-easypi@latest/src/sdpi.css">
+    <script src="https://cdn.jsdelivr.net/gh/barraider/streamdeck-easypi@latest/src/sdtools.common.js"></script>
+</head>
+<body>
+    <div class="sdpi-wrapper">
+        <details class="message info">
+            <summary>For feedback/suggestions contact me at <span class="linkspan" onclick="openWebsite()">https://BarRaider.com</span> </summary>
+        </details>
+        <div class="sdpi-item" id="select_single" style="display:none;">
+            <div class="sdpi-item-label">Strip/Bus</div>
+            <select class="sdpi-item-value select sdProperty" id="strip" oninput="setSettings()">
+                <option value="0">Strip</option>
+                <option value="1">Bus</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Strip Num</div>
+            <select class="sdpi-item-value select sdProperty" id="stripNum" oninput="setSettings()">
+                <option value="0">0</option>
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="select_single">
+            <div class="sdpi-item-label">Setting</div>
+            <select class="sdpi-item-value select sdProperty" id="paramType" oninput="setSettings()" value="0">
+                <option value="0">comp</option>
+                <option value="1">denoiser</option>
+                <option value="2">delay</option>
+                <option value="3">fx1</option>
+                <option value="4">fx2</option>
+                <option value="5">gate</option>
+                <option value="6">reverb</option>
+            </select>
+        </div>
+        <div class="sdpi-item" id="dvStepSize">
+            <div class="sdpi-item-label">Step Size</div>
+            <select class="sdpi-item-value select sdProperty" id="stepSize" oninput="setSettings()">
+                <option value="0.1">0.1</option>
+                <option value="0.2">0.2</option>
+                <option value="0.5">0.5</option>
+                <option value="1" selected>1</option>
+                <option value="2">2</option>
+                <option value="5">5</option>
+                <option value="10">10</option>
+            </select>
+        </div>
+        <div class="sdpi-item">
+            <div class="sdpi-item-label">Title (optional)</div>
+            <input class="sdpi-item-value sdProperty" placeholder="" value="" id="title" oninput="setSettings()">
+        </div>
+    </div>
+</body>
+</html>

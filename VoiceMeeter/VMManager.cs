@@ -75,6 +75,11 @@ namespace VoiceMeeter
             return client.GetParam(paramName).ToString("0.##");
         }
 
+        public string GetParamString(string paramName)
+        {
+            return client.GetParamString(paramName);
+        }
+
         public void SetParam(string paramName, float value)
         {
             client.SetParam(paramName, value);
