@@ -51,7 +51,7 @@ https://github.com/BarRaider/streamdeck-voicemeeter/releases/
 - Live feedback on whatever setting you choose
 - Option to turn off the Live feedback and set the title to whatever you want (including a prefix using the `TitlePrefix` parameter)
 
-#### VoiceMeeter Advanced Toogle
+#### VoiceMeeter Advanced Toggle
 - **Note:** This is for advanced users but there are explanations under the ***Fields explained*** section below
 - Focused on toggling between two modes (versus press and long press in the VoiceMeeter Advanced Press/Long-Press)
 - Mode1 should always turn things ON and Mode2 should turn things OFF
