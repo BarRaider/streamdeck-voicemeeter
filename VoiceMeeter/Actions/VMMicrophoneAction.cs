@@ -40,7 +40,8 @@ namespace VoiceMeeter
                     UserImage1 = String.Empty,
                     UserImage2 = String.Empty,
                     MuteHotkey = String.Empty,
-                    UnmuteHotkey = String.Empty
+                    UnmuteHotkey = String.Empty,
+                    TitlePrefix = String.Empty
                 };
 
                 return instance;
@@ -75,12 +76,16 @@ namespace VoiceMeeter
             [JsonProperty(PropertyName = "unmuteHotkey")]
             public string UnmuteHotkey { get; set; }
 
+            [JsonProperty(PropertyName = "titlePrefix")]
+            public string TitlePrefix { get; set; }
+
         }
 
         #region Private members
 
         private readonly PluginSettings settings;
         private bool didSetNotConnected = false;
+        private bool didSetTitle = false;
 
         #endregion
 
@@ -175,6 +180,20 @@ namespace VoiceMeeter
             {
                 didSetNotConnected = false;
                 await Connection.SetImageAsync((String)null);
+            }
+
+            // Set the title
+            string titlePrefix = settings.TitlePrefix?.Replace(@"\n", "\n");
+            bool isTitleEmpty = String.IsNullOrEmpty(titlePrefix);
+            if (!isTitleEmpty || didSetTitle)
+            {
+                didSetTitle = true;
+                await Connection.SetTitleAsync(titlePrefix);
+
+                if (isTitleEmpty)
+                {
+                    didSetTitle = false;
+                }
             }
 
             await Connection.SetImageAsync(GetBase64ImageStatus());
