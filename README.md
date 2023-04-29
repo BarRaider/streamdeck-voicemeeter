@@ -3,6 +3,9 @@ VoiceMeeter integration and live feedback for the Elgato Stream Deck device.
 
 **Author's website and contact information:** [https://barraider.com](https://barraider.com)
 
+## New in v2.2
+- Added `Title` support for Microphone action
+
 ## New in v2.1
 - **Advanced Queries Support** - The `Advanced Toggle` action's `Mode1 Check` now supports performing complex queries with `==` and `!=` as well as `AND/OR`. 
     - Example: `Strip[0].Mute AND Strip[1].Gain==7.5 AND Strip[2].device.name!="Elgato Wave"`

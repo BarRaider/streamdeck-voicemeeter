@@ -38,7 +38,7 @@
 	<ItemGroup>
 		<PackageReference Include="RtMidi.Core" Version="1.0.51" />
 		<PackageReference Include="Serilog" Version="2.12.0" />
-		<PackageReference Include="StreamDeck-Tools" Version="5.9.1-Beta1" />
+		<PackageReference Include="StreamDeck-Tools" Version="6.1.1" />
 	</ItemGroup>
 	<ItemGroup>
 		<Reference Include="CommandLine, Version=2.8.0.0, Culture=neutral, PublicKeyToken=5a870481e358d379, processorArchitecture=MSIL">

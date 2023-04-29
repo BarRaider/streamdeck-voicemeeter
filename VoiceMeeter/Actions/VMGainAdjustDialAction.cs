@@ -112,24 +112,30 @@ namespace VoiceMeeter
             VMManager.Instance.SetParam(BuildDeviceName(), (float)outputVolume);
         }
 
-        public async override void DialPress(DialPressPayload payload)
+
+        public async override void DialDown(DialPayload payload)
         {
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} Dial Pressed");
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} Dial Down");
             if (!VMManager.Instance.IsConnected)
             {
-                Logger.Instance.LogMessage(TracingLevel.ERROR, $"Dial Pressed but VM is not connected!");
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"Dial Down but VM is not connected!");
                 await Connection.ShowAlert();
                 return;
             }
 
-            if (payload.IsDialPressed)
+            dialWasRotated = false;
+        }
+
+        public async override void DialUp(DialPayload payload)
+        {
+            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} Dial Up");
+            if (!VMManager.Instance.IsConnected)
             {
-                Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} Dial Pressed");
-                dialWasRotated = false;
+                Logger.Instance.LogMessage(TracingLevel.ERROR, $"Dial Up but VM is not connected!");
+                await Connection.ShowAlert();
                 return;
             }
 
-            Logger.Instance.LogMessage(TracingLevel.INFO, $"{this.GetType()} Dial Released");
             if (dialWasRotated)
             {
                 return;
